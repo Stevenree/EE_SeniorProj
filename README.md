@@ -10,8 +10,6 @@ This project will incorporate modern ML techniques for [automatic manga translat
 Start app by typing in the root directory:
 ```
 npm start
-// or //
-electron .
 ```
 -Blank-
 
