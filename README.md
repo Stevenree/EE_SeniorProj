@@ -3,7 +3,16 @@
 ## Project Outline
 This project will incorporate modern ML techniques for [automatic manga translation](https://arxiv.org/abs/2012.14271) and [automatic OCR capture](https://arxiv.org/abs/1803.08670), among others, to create an effective language learning tool for comic readers. 
 
+## Dependencies
+1. npm
+
 ## Usage
+Start app by typing in the root directory:
+```
+npm start
+// or //
+electron .
+```
 -Blank-
 
 ## Features completed
