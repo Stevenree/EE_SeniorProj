@@ -24,7 +24,11 @@ export default class TitleBar extends Component {
                 </Center>
 
                 <Center>
-                    <Button colorScheme="red">.</Button>
+                    <Button colorScheme="red" 
+                        onClick={ ()=>{window.ipcRenderer.send("closeApp")} }
+                    > 
+                        .
+                    </Button>
                 </Center>
 
             </Flex>

@@ -1,7 +1,8 @@
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
+const ipc = ipcMain;
 
 function createWindow() {
     // Create the browser window.
@@ -12,6 +13,9 @@ function createWindow() {
         height: 800,
         webPreferences: {
             nodeIntegration: true,
+            contextIsolation: false,
+            // This preload file globally defines our IPC, so that the renderer can use it. Also, it lets react browser window not crash since it is defined at time of launch or something.
+            preload: __dirname + "/preload.js",
             // devTools: true,
         },
     });
@@ -22,6 +26,11 @@ function createWindow() {
     if (isDev) {
         // win.webContents.openDevTools({ mode: 'detach' });
     }
+
+    ipc.on('closeApp', ()=>{
+        console.log("IPC: Close event");
+        win.close();
+    })
 }
 
 // This method will be called when Electron has finished
