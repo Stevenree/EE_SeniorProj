@@ -27,10 +27,26 @@ function createWindow() {
         // win.webContents.openDevTools({ mode: 'detach' });
     }
 
+    ipc.on('minimizeApp', ()=>{
+        console.log("IPC: minimize event");
+        win.minimize();
+    })
+
+    ipc.on('maximizeApp', ()=>{
+        console.log("IPC: maximize event");
+        if( win.isMaximized() ){
+            win.restore(); // Returns from fullscreen mode to some set size
+        }
+        else{
+            win.maximize();
+        }
+    })
+
     ipc.on('closeApp', ()=>{
-        console.log("IPC: Close event");
+        console.log("IPC: close event");
         win.close();
     })
+
 }
 
 // This method will be called when Electron has finished

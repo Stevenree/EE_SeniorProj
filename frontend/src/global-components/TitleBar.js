@@ -16,16 +16,27 @@ export default class TitleBar extends Component {
                 </Box>
 
                 <Center>
-                    <Button colorScheme="green">.</Button>
+                    <Button 
+                        colorScheme="green"
+                        onClick={ ()=>{window.ipcRenderer.send("minimizeApp")} }
+                    >
+                        .
+                    </Button>
                 </Center>
 
                 <Center>
-                    <Button colorScheme="yellow">.</Button>
+                    <Button 
+                    colorScheme="yellow"
+                    onClick={ ()=>{window.ipcRenderer.send("maximizeApp")} }
+                    >
+                        .
+                    </Button>
                 </Center>
 
                 <Center>
-                    <Button colorScheme="red" 
-                        onClick={ ()=>{window.ipcRenderer.send("closeApp")} }
+                    <Button 
+                        colorScheme="red" 
+                        onClick={ ()=>{window.ipcRenderer.send("closeApp")} } 
                     > 
                         .
                     </Button>
