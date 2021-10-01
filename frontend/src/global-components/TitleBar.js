@@ -1,46 +1,55 @@
 import { Box, Center, Flex, HStack, VStack } from '@chakra-ui/layout'
-import { Button, Text } from '@chakra-ui/react'
+import { Button, Text, IconButton } from '@chakra-ui/react'
 import React, { Component } from 'react'
+import { CloseIcon, MinusIcon, CopyIcon, HamburgerIcon } from '@chakra-ui/icons'
 import './TitleBar.css'
+
 
 export default class TitleBar extends Component {
     render() {
         return (
-            <Flex bgColor="#2B2B2B" w={"100%"} h={"60px"}> 
+            <Flex bgColor="#2B2B2B" w={"100%"} h={"35px"}> 
                 
-                <Center marginLeft={"10px"}>
-                    <Button>_</Button>
-                </Center>
+                <IconButton className="window-controls"
+                    bgColor="#2B2B2B"
+                    h={"100%"}
+                    borderRadius={0}
+                    icon={<HamburgerIcon color={'gray.400'}/>}
+                    onClick={ ()=>{} }
+                ></IconButton>
 
-                <Box flex="1" className="draggable">
+                {/* Center part of the title bar is draggable*/}
+                <Box flex="1" h={"100%"} className="draggable">
+                    <Center> <Text color={"gray.400"}> S.lee and T.k's fun adventure :) </Text> </Center>
                 </Box>
 
-                <Center>
-                    <Button 
-                        colorScheme="green"
-                        onClick={ ()=>{window.ipcRenderer.send("minimizeApp")} }
-                    >
-                        .
-                    </Button>
-                </Center>
+                {/* There must be a better way to structure these.
+                    I tried doing it with CSS and giving them the same class to reduce the code, but I couldn't get it to work. 
+                    Look at this later
+                */}
+                <IconButton className="window-controls"
+                    bgColor="#2B2B2B"
+                    h={"100%"}
+                    borderRadius={0}
+                    icon={<MinusIcon color={'gray.400'}/>}
+                    onClick={ ()=>{window.ipcRenderer.send("minimizeApp")} }
+                ></IconButton>
+                
+                <IconButton className="window-controls"
+                bgColor="#2B2B2B"
+                h={"100%"}
+                borderRadius={0}
+                icon={<CopyIcon color={'gray.400'}/>}
+                onClick={ ()=>{window.ipcRenderer.send("maximizeApp")} }
+                ></IconButton>
 
-                <Center>
-                    <Button 
-                    colorScheme="yellow"
-                    onClick={ ()=>{window.ipcRenderer.send("maximizeApp")} }
-                    >
-                        .
-                    </Button>
-                </Center>
-
-                <Center>
-                    <Button 
-                        colorScheme="red" 
-                        onClick={ ()=>{window.ipcRenderer.send("closeApp")} } 
-                    > 
-                        .
-                    </Button>
-                </Center>
+                <IconButton className="window-controls close-button"
+                    bgColor="#2B2B2B"
+                    h={"100%"}
+                    borderRadius={0}
+                    icon={<CloseIcon color={'gray.400'}/>}
+                    onClick={ ()=>{window.ipcRenderer.send("closeApp")} } 
+                ></IconButton>
 
             </Flex>
         )

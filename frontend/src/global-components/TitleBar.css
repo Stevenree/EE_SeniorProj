@@ -1,3 +1,22 @@
 .draggable{
     -webkit-app-region: drag;
 }
+
+.window-controls{
+}
+
+.window-controls:hover{
+    background-color: #545454
+}
+
+.window-controls:active{
+    background-color: #545454
+}
+
+.window-controls:focus{
+    box-shadow: none !important;
+}
+
+.close-button:hover{
+    background-color: #D32626 !important;
+}
