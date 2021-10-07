@@ -7,10 +7,14 @@ import TitleBar from "./global-components/TitleBar";
 import SideBar from "./global-components/SideBar";
 
 function App() {
+    
     return(
         <ChakraProvider>
+            
             <TitleBar />
-            <SideBar />
+    
+            <SideBar /> 
+
         </ChakraProvider>
     )
 }

@@ -4,6 +4,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const ipc = ipcMain;
 
+
 function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
@@ -15,7 +16,7 @@ function createWindow() {
             nodeIntegration: true,
             contextIsolation: false,
             // This preload file globally defines our IPC, so that the renderer can use it. Also, it lets react browser window not crash since it is defined at time of launch or something.
-            preload: __dirname + "/preload.tsx",
+            preload: __dirname + "/preload.js",
             // devTools: true,
         },
     });

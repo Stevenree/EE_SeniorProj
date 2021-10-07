@@ -19,7 +19,7 @@
         "react-scripts": "4.0.3",
         "web-vitals": "^1.0.1"
     },
-    "main": "public/Main.tsx",
+    "main": "public/Main.ts",
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
