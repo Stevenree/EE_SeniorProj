@@ -8,20 +8,11 @@ import './TitleBar.css'
 export default class TitleBar extends Component {
     render() {
         return (
-            <Flex bgColor="#2B2B2B" w={"100%"} h={"35px"}> 
+            <Flex bgColor="#2B2B2B" w={"100%"} h={"35px"} flexGrow={0}> 
                 
-                <IconButton className="window-controls"
-                    aria-label="burger"
-                    bgColor="#2B2B2B"
-                    h={"100%"}
-                    borderRadius={0}
-                    icon={<HamburgerIcon color={'gray.400'}/>}
-                    onClick={ ()=>{} }
-                ></IconButton>
-
                 {/* Center part of the title bar is draggable*/}
                 <Box flex="1" h={"100%"} className="draggable">
-                    <Center> <Text color={"gray.400"}> Senior Project </Text> </Center>
+
                 </Box>
 
                 {/* There must be a better way to structure these.
