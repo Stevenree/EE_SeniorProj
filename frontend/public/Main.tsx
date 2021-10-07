@@ -15,7 +15,7 @@ function createWindow() {
             nodeIntegration: true,
             contextIsolation: false,
             // This preload file globally defines our IPC, so that the renderer can use it. Also, it lets react browser window not crash since it is defined at time of launch or something.
-            preload: __dirname + "/preload.js",
+            preload: __dirname + "/preload.tsx",
             // devTools: true,
         },
     });

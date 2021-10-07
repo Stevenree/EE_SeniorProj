@@ -1,5 +1,5 @@
-import { Box, Center, Flex, HStack, VStack } from '@chakra-ui/layout'
-import { Button, Text, IconButton } from '@chakra-ui/react'
+import { Box, Center, Flex } from '@chakra-ui/layout'
+import { Text, IconButton } from '@chakra-ui/react'
 import React, { Component } from 'react'
 import { CloseIcon, MinusIcon, CopyIcon, HamburgerIcon } from '@chakra-ui/icons'
 import './TitleBar.css'
@@ -11,6 +11,7 @@ export default class TitleBar extends Component {
             <Flex bgColor="#2B2B2B" w={"100%"} h={"35px"}> 
                 
                 <IconButton className="window-controls"
+                    aria-label="burger"
                     bgColor="#2B2B2B"
                     h={"100%"}
                     borderRadius={0}
@@ -20,7 +21,7 @@ export default class TitleBar extends Component {
 
                 {/* Center part of the title bar is draggable*/}
                 <Box flex="1" h={"100%"} className="draggable">
-                    <Center> <Text color={"gray.400"}> S.lee and T.k's fun adventure :) </Text> </Center>
+                    <Center> <Text color={"gray.400"}> Senior Project </Text> </Center>
                 </Box>
 
                 {/* There must be a better way to structure these.
@@ -28,6 +29,7 @@ export default class TitleBar extends Component {
                     Look at this later
                 */}
                 <IconButton className="window-controls"
+                    aria-label="minimize"
                     bgColor="#2B2B2B"
                     h={"100%"}
                     borderRadius={0}
@@ -36,14 +38,16 @@ export default class TitleBar extends Component {
                 ></IconButton>
                 
                 <IconButton className="window-controls"
-                bgColor="#2B2B2B"
-                h={"100%"}
-                borderRadius={0}
-                icon={<CopyIcon color={'gray.400'}/>}
-                onClick={ ()=>{window.ipcRenderer.send("maximizeApp")} }
+                    aria-label="maximize"
+                    bgColor="#2B2B2B"
+                    h={"100%"}
+                    borderRadius={0}
+                    icon={<CopyIcon color={'gray.400'}/>}
+                    onClick={ ()=>{window.ipcRenderer.send("maximizeApp")} }
                 ></IconButton>
 
                 <IconButton className="window-controls close-button"
+                    aria-label="close"
                     bgColor="#2B2B2B"
                     h={"100%"}
                     borderRadius={0}
