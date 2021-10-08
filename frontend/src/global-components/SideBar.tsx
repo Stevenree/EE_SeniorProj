@@ -1,4 +1,4 @@
-import { Box, Center, VStack } from '@chakra-ui/layout'
+import { Box, Center, Link, VStack } from '@chakra-ui/layout'
 import React, { Component } from 'react'
 import { IconButton, Text } from '@chakra-ui/react'
 import { route } from './types'
@@ -10,12 +10,13 @@ type DrawerStates = {
 }
 
 const page_routes:route[] = [ 
-	{id:1, name:"Reader", url:""},
-	{id:2, name:"Translator", url:""},
-	{id:3, name:"Cleaner", url:""},
-	{id:4, name:"Cards", url:""},
-	{id:5, name:"Statistics", url:""},
-	{id:6, name:"About", url:""},
+	{id:0, name:"Home", url:"/"},
+	{id:1, name:"Reader", url:"/reader"},
+	{id:2, name:"Translator", url:"/"},
+	{id:3, name:"Cleaner", url:"/"},
+	{id:4, name:"Cards", url:"/"},
+	{id:5, name:"Statistics", url:"/"},
+	{id:6, name:"About", url:"/"},
 ]
 
 export default class SideBar extends Component {
@@ -33,11 +34,15 @@ export default class SideBar extends Component {
 
 		const route_buttons = page_routes.map( 
 			(route) => 
-				<Box w={'100%'} _hover={{'background':'#545454'}} cursor={'pointer'}>
-					<Center> 
-						<Text color="whiteAlpha.900" fontSize="xl"> {route.name} </Text>
-					</Center>
-				</Box>
+				
+					<Box w={'100%'} _hover={{'background':'#545454'}} cursor={'pointer'}>
+						<a href={route.url} >
+							<Center> 
+								<Text color="whiteAlpha.900" fontSize="xl" userSelect="none"> {route.name} </Text>
+							</Center>
+						</a>
+						<Box h="5px"/>
+					</Box>
 		)
 
 		const drawer_handle = (
@@ -62,13 +67,13 @@ export default class SideBar extends Component {
 		)
 
 		return (
-			<>
+			<Box flex={0}>
 				{/* Container for the sidebar button */}
-				<Box position="absolute" w={'150px'} top={"60px"} left={0}>
+				<Box position="absolute" w={'120px'} top={"60px"} left={0}>
 					<Center>{drawer_handle}</Center>
 				</Box>
 				{ this.state.isOpen===true ? 
-					<Box h={'100%'} w={'150px'} bgColor={'#2B2B2B'} overflow={'hidden'}>
+					<Box h={'100%'} w={'120px'} bgColor={'#2B2B2B'} overflow={'hidden'}>
 						<VStack>
 							<Box h="96px" />
 							{route_buttons}
@@ -77,7 +82,7 @@ export default class SideBar extends Component {
 					<> </>
 				}
 				
-			</>
+			</Box>
 		)
 	}
 }

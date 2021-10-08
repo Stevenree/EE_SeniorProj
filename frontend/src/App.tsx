@@ -5,6 +5,14 @@ import { Box, Flex } from "@chakra-ui/layout";
 import './App.css';
 import TitleBar from "./global-components/TitleBar";
 import SideBar from "./global-components/SideBar";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom"
+import Reader from "./Pages/Reader";
+import Home from "./Pages/Home";
 
 function App() {
     document.body.style.height='100%';
@@ -18,14 +26,22 @@ function App() {
                 <TitleBar />
                     
                 {/* Container body for the rest of the application */}
-                <Box 
-                    bgColor={"green.50"} 
-                    flexGrow={1} 
-                    flexShrink={1} 
-                    flexBasis={'auto'}
-                >   
-                    <SideBar/>
+                <Box bgColor={"green.50"} flexGrow={1} flexShrink={1} flexBasis={'auto'}>   
+                    <Flex flexFlow="row" w={'100%'} h={'100%'}>
+                
+                        <SideBar/>
+                        
+                        {/* Now we need to render the actual page that we've routed */}
+                        <Router>
+                            <Switch>
+                                <Route exact path="/reader" component={Reader} />
+                                <Route exact path="/" component={Home}/>
+                            </Switch>
+                        </Router>
+
+                    </Flex>
                 </Box>
+                
             </Flex>
 
         </ChakraProvider>
