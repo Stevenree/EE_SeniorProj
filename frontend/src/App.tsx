@@ -1,8 +1,7 @@
 // @ts-nocheck
 import * as React from "react"
 import { ChakraProvider } from "@chakra-ui/react" // Required by Chakra UI
-import logo from './logo.svg';
-import { Box, Flex, Text } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
 import './App.css';
 import TitleBar from "./global-components/TitleBar";
 import SideBar from "./global-components/SideBar";

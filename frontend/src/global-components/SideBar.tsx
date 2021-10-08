@@ -1,18 +1,9 @@
-
-import { Box, Center, Divider, VStack } from '@chakra-ui/layout'
+import { Box, Center, VStack } from '@chakra-ui/layout'
 import React, { Component } from 'react'
-import {
-Drawer,
-DrawerBody,
-DrawerFooter,
-DrawerHeader,
-DrawerOverlay,
-DrawerContent,
-DrawerCloseButton,
-} from "@chakra-ui/react"
-import { Button, Text } from '@chakra-ui/react'
+import { IconButton, Text } from '@chakra-ui/react'
 import { route } from './types'
 import './SideBar.css'
+import { ArrowBackIcon, ArrowForwardIcon, ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
 
 type DrawerStates = {
 	isOpen: boolean,
@@ -33,6 +24,7 @@ export default class SideBar extends Component {
 		isOpen: true
 	}
 
+	// unused
 	highlight(e:any){
 		e.target.style.background = '#545454'
 	}
@@ -40,32 +32,52 @@ export default class SideBar extends Component {
 	render() {
 
 		const route_buttons = page_routes.map( 
-			(route) => (
-				<Box
-					w={'100%'}
-					_hover={{'background':'#545454'}}
-					cursor={'pointer'}
-				>
+			(route) => 
+				<Box w={'100%'} _hover={{'background':'#545454'}} cursor={'pointer'}>
 					<Center> 
 						<Text color="whiteAlpha.900" fontSize="xl"> {route.name} </Text>
 					</Center>
 				</Box>
-			))
+		)
+
+		const drawer_handle = (
+			<>
+			{ this.state.isOpen===true ? 
+				<IconButton 
+					aria-label="close-button" 
+					borderRadius={'100vh'} bgColor={"#2B2B2B"} w="64px" h="64px" boxShadow="none !important"
+					icon={<ArrowBackIcon boxSize="36px" color="whiteAlpha.900"/>}
+					_hover={{'background':'#545454'}}
+					onClick={ () => {this.setState({isOpen:false})} }
+				></IconButton> :
+				<IconButton 
+					aria-label="close-button" 
+					borderRadius={'100vh'} bgColor={"#2B2B2B"} w="64px" h="64px" boxShadow="none !important"
+					icon={<ArrowForwardIcon boxSize="36px" color="whiteAlpha.900"/>}
+					_hover={{'background':'#545454'}}
+					onClick={ () => {this.setState({isOpen:true})} }
+				></IconButton>
+			}
+			</>
+		)
 
 		return (
-			<Box 
-			h={'100%'} w={'200px'} 
-			bgColor={'#2B2B2B'}
-			overflow={'hidden'}
-			>
-				<VStack>
-					
-					<Box marginBottom={'60px'}/>
-
-					{route_buttons}
-				</VStack>
-
-			</Box>
+			<>
+				{/* Container for the sidebar button */}
+				<Box position="absolute" w={'150px'} top={"60px"} left={0}>
+					<Center>{drawer_handle}</Center>
+				</Box>
+				{ this.state.isOpen===true ? 
+					<Box h={'100%'} w={'150px'} bgColor={'#2B2B2B'} overflow={'hidden'}>
+						<VStack>
+							<Box h="96px" />
+							{route_buttons}
+						</VStack>
+					</Box> : 
+					<> </>
+				}
+				
+			</>
 		)
 	}
 }
