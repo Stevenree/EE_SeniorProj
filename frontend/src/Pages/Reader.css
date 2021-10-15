@@ -1,0 +1,9 @@
+.menu-btn{
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: default;
+}
+
+.menu-btn:hover{
+    background-color: #545454;
+}

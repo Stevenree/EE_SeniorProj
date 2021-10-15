@@ -2,7 +2,6 @@ import { Box, Center, Link, VStack } from '@chakra-ui/layout'
 import React, { Component } from 'react'
 import { IconButton, Text } from '@chakra-ui/react'
 import { route } from './types'
-import './SideBar.css'
 import { ArrowBackIcon, ArrowForwardIcon, ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
 
 type DrawerStates = {

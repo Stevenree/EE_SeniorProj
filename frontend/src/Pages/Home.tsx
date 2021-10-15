@@ -1,4 +1,4 @@
-import { Box, Center, VStack } from '@chakra-ui/layout'
+import { Box, Center } from '@chakra-ui/layout'
 import React, { Component } from 'react'
 
 export default class Home extends Component {
