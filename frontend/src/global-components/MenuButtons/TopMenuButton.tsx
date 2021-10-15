@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './MenuButtons.css'
 
 type topMenuBtnProps = {
     menuName: string,
@@ -17,12 +18,19 @@ export default class TopMenuButton extends Component<any,any> {
 
     render() {
         return (
-            <div>
-                <button id="fileMenu" className="menuTop" 
-                aria-haspopup="true" aria-expanded="false" aria-label="File">
+            <div className="menuContainer">
+                {/* Top Menu Button */}
+                <button id={this.menuName} className="menuButton" 
+                    aria-haspopup="true" 
+                    aria-expanded="false" 
+                    aria-label={this.menuName}>
                     {this.menuName}
                 </button>
-                    {this.children?.toString()}
+                
+                {/* Child Menu */}
+                <div className="menuItemContainer">
+                    {this.children}
+                </div>
             </div>
         )
     }
