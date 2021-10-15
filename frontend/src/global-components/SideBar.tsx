@@ -49,14 +49,16 @@ export default class SideBar extends Component {
 			{ this.state.isOpen===true ? 
 				<IconButton 
 					aria-label="close-button" 
-					borderRadius={'100vh'} bgColor={"#2B2B2B"} w="64px" h="64px" boxShadow="none !important"
+					borderRadius={'100vh'} bgColor={"#2B2B2B"} boxShadow="none !important"
+					w="64px" h="64px" marginTop="10px"
 					icon={<ArrowBackIcon boxSize="36px" color="whiteAlpha.900"/>}
 					_hover={{'background':'#545454'}}
 					onClick={ () => {this.setState({isOpen:false})} }
 				></IconButton> :
 				<IconButton 
 					aria-label="close-button" 
-					borderRadius={'100vh'} bgColor={"#2B2B2B"} w="64px" h="64px" boxShadow="none !important"
+					borderRadius={'100vh'} bgColor={"#2B2B2B"} boxShadow="none !important"
+					w="64px" h="64px" marginTop="10px" 
 					icon={<ArrowForwardIcon boxSize="36px" color="whiteAlpha.900"/>}
 					_hover={{'background':'#545454'}}
 					onClick={ () => {this.setState({isOpen:true})} }

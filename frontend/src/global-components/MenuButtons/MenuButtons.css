@@ -6,7 +6,7 @@
 .menuContainer > button {
     background-color: inherit;
     color: inherit;
-    min-width: 100px;
+    min-width: 64px;
     padding: 4px 16px;
 }
 
@@ -29,15 +29,15 @@
 
 .menuContainer .menuItemContainer {
     background-color: #343434;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
     min-width: 180px;
     position: absolute;
     z-index: 1;
 }
 
 .menuContainer .menuItemContainer button {
-    background-color: #343434;
-    color: whitesmoke;
+    background-color: #e6f0e5;
+    color: rgb(39, 39, 39);
     display: block;
     padding: 8px;
     text-align: left;
@@ -47,6 +47,10 @@
 
 .menuContainer button:hover {
     background-color: #545454;
+}
+
+.menuContainer .menuItemContainer button:hover {
+    background-color: #bdf0b8;
 }
 
 .menuContainer > button[aria-expanded="true"]{
