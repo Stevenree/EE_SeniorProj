@@ -7,9 +7,9 @@ This project will incorporate modern ML techniques for [automatic manga translat
 1. npm
 
 ## Usage
-Start app by typing in the root directory:
+Start app (dev, not build) by typing in the root directory:
 ```
-npm start
+npm run dev
 ```
 -Blank-
 
