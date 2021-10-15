@@ -6,7 +6,7 @@
 .menuContainer > button {
     background-color: inherit;
     color: inherit;
-    min-width: 48px;
+    min-width: 100px;
     padding: 4px 16px;
 }
 
@@ -14,6 +14,13 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 
 .menuContainer button:focus {
@@ -21,7 +28,7 @@
 }
 
 .menuContainer .menuItemContainer {
-    background-color: var(--app-menu-bg);
+    background-color: #343434;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     min-width: 180px;
     position: absolute;
@@ -29,19 +36,19 @@
 }
 
 .menuContainer .menuItemContainer button {
-    background-color: var(--app-menu-bg);
-    color: var(--app-menu-color);
+    background-color: #343434;
+    color: whitesmoke;
     display: block;
-    padding: 16px;
+    padding: 8px;
     text-align: left;
     width: 100%;
 }
 
-/* .menuTop{
-    padding-left: 15px;
-    padding-right: 15px;
-} */
 
-.menuButton:hover{
+.menuContainer button:hover {
+    background-color: #545454;
+}
+
+.menuContainer > button[aria-expanded="true"]{
     background-color: #545454;
 }

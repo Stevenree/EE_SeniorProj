@@ -10,14 +10,26 @@ export default class Reader extends Component {
 
         return (
             <Box h="32px" w={'100%'} bgColor="#343434"> 
-                <HStack color="whiteAlpha.900"> 
+                <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
                     <TopMenuButton menuName="File">
-                        <ChildMenuButton name="AH"/>
+                        <ChildMenuButton name="Open Folder"/>
+                        <ChildMenuButton name="Open Recent"/>
+                        <ChildMenuButton name="Save Project"/> 
+                        <ChildMenuButton name="Exit project"/>
                     </TopMenuButton>
-                    <TopMenuButton menuName="Edit"/>
-                    <TopMenuButton menuName="View"/>
-                    <TopMenuButton menuName="About"/>
-                </HStack>
+
+                    <TopMenuButton menuName="Edit"> 
+                    
+                    </TopMenuButton>
+                    
+                    <TopMenuButton menuName="View">
+                        <ChildMenuButton name="Fullscreen"/>
+                    </TopMenuButton>
+
+                    <TopMenuButton menuName="About">
+                    
+                    </TopMenuButton>
+                </Flex>
             </Box>
 
         )
