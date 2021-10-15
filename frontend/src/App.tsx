@@ -11,8 +11,8 @@ import {
     Route,
     Link
 } from "react-router-dom"
-import Reader from "./Pages/Reader";
-import Home from "./Pages/Home";
+import Reader from "./Pages/Reader/Reader.tsx";
+import Home from "./Pages/Home.tsx";
 
 function App() {
     document.body.style.height='100%';

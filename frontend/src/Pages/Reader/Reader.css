@@ -1,9 +1,9 @@
-.menu-btn{
+.menuTop{
     padding-left: 15px;
     padding-right: 15px;
     cursor: default;
 }
 
-.menu-btn:hover{
+.menuTop:hover{
     background-color: #545454;
 }
