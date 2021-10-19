@@ -15,7 +15,6 @@ export default class ChildMenuButton extends Component<any,any> {
     constructor(props:childMenuBtnTypes){
         super(props)
         this.name = props.name
-        // make this function copy whatever props.onClick() is set to be
         this.buttonClicked = () => {this.props.onClick()}
     }
     

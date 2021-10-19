@@ -6,18 +6,24 @@ import './Reader.css'
 import ChildMenuButton from 'src/global-components/MenuButtons/ChildMenuButton'
 import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
 export default class Reader extends Component {
-    render() {
+    
+    selectFiles = () => {
+        const fileSelector = document.createElement('input');
+        fileSelector.setAttribute('type', 'file');
+        fileSelector.setAttribute('multiple', 'multiple');
+        fileSelector.click();
+    }
 
+    render() {
+        
         return (
             <Box h="32px" w={'100%'} bgColor="#343434"> 
                 <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
                     <TopMenuButton menuName="File">
-                        <ChildMenuButton name="Open Folder" 
-                            onClick={()=>{alert("Open Folder...")}}
-                        />
-                        <ChildMenuButton name="Open Recent"/>
-                        <ChildMenuButton name="Save Project"/> 
-                        <ChildMenuButton name="Exit project"/>
+                        <ChildMenuButton name="Open Folder" onClick={()=>{this.selectFiles()}}/>
+                        <ChildMenuButton name="Open Recent" onClick={()=>{this.selectFiles()}}/>
+                        <ChildMenuButton name="Save Project" onClick={()=>{}}/> 
+                        <ChildMenuButton name="Exit project" onClick={()=>{}}/>
                     </TopMenuButton>
 
                     <TopMenuButton menuName="Edit"> 
@@ -25,10 +31,10 @@ export default class Reader extends Component {
                     </TopMenuButton>
                     
                     <TopMenuButton menuName="View">
-                        <ChildMenuButton name="Fullscreen"/>
+                        <ChildMenuButton name="Fullscreen" onClick={()=>{}}/>
                     </TopMenuButton>
 
-                    <TopMenuButton menuName="About">
+                    <TopMenuButton menuName="About" onClick={()=>{}}>
                     
                     </TopMenuButton>
                 </Flex>
