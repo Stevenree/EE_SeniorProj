@@ -1,5 +1,5 @@
 import { Box, Center, IconButton } from '@chakra-ui/react'
-import React, { Component } from 'react'
+import React, { Component, useRef } from 'react'
 import { Flex, HStack, VStack} from '@chakra-ui/layout'
 import { AttachmentIcon } from '@chakra-ui/icons'
 import './Reader.css'
@@ -12,7 +12,9 @@ export default class Reader extends Component {
             <Box h="32px" w={'100%'} bgColor="#343434"> 
                 <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
                     <TopMenuButton menuName="File">
-                        <ChildMenuButton name="Open Folder"/>
+                        <ChildMenuButton name="Open Folder" 
+                            onClick={()=>{alert("Open Folder...")}}
+                        />
                         <ChildMenuButton name="Open Recent"/>
                         <ChildMenuButton name="Save Project"/> 
                         <ChildMenuButton name="Exit project"/>
