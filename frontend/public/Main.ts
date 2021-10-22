@@ -51,10 +51,15 @@ function createWindow() {
 
     ipc.on('open-dir-dialog', ()=>{
         console.log("Opening directory browser");
+        
         dialog.showOpenDialog(
             {properties: ['openDirectory']},
-        ).then(dir => {
-            console.log(dir.filePaths)
+        )
+        .then(dir => {
+            let dirPath = dir.filePaths[0];
+            fs.readdirSync(dir.filePaths[0]).forEach(file => {
+                console.log(path.join(dirPath, file))
+            })
         })
     })
 
