@@ -5,6 +5,7 @@
     "dependencies": {
         "@chakra-ui/icons": "^1.0.15",
         "@chakra-ui/react": "^1.6.8",
+        "@electron/remote": "^2.0.1",
         "@emotion/react": "^11.4.1",
         "@emotion/styled": "^11.3.0",
         "@testing-library/jest-dom": "^5.11.4",
@@ -30,20 +31,20 @@
     },
     "eslintConfig": {
         "extends": [
-        "react-app",
-        "react-app/jest"
+            "react-app",
+            "react-app/jest"
         ]
     },
     "browserslist": {
         "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
         ],
         "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
         ]
     },
     "devDependencies": {

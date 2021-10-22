@@ -4,7 +4,7 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const fs = require('fs');
 const ipc = ipcMain;
-
+const dialog = require('electron').dialog;
 
 function createWindow() {
     // Create the browser window.
@@ -48,6 +48,17 @@ function createWindow() {
         console.log("IPC: close event");
         win.close();
     })
+
+    ipc.on('open-dir-dialog', ()=>{
+        console.log("Opening directory browser");
+        dialog.showOpenDialog(
+            {properties: ['openDirectory']},
+        ).then(dir => {
+            console.log(dir.filePaths)
+        })
+    })
+
+    
 
 }
 

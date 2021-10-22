@@ -6,34 +6,27 @@ import './Reader.css'
 import ChildMenuButton from 'src/global-components/MenuButtons/ChildMenuButton'
 import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
 declare var window: any;
-const dialog = window.electron.remote.dialog;
-
 export default class Reader extends Component {
     comic_folder_url:string = ""
-    fileSelector:HTMLInputElement = document.createElement('input')
+    // fileSelector:HTMLInputElement = document.createElement('input')
 
     componentDidMount(){
         // initialize the input element
-        this.fileSelector.setAttribute('type', 'file');
-        this.fileSelector.setAttribute('value', '');
-        this.fileSelector.name = 'fileList'
-        this.fileSelector.setAttribute('directory', '');
-        this.fileSelector.setAttribute('webkitdirectory', '');
+        // this.fileSelector.setAttribute('type', 'file');
+        // this.fileSelector.setAttribute('value', '');
+        // this.fileSelector.name = 'fileList'
+        // this.fileSelector.setAttribute('directory', '');
+        // this.fileSelector.setAttribute('webkitdirectory', '');
 
-        this.fileSelector.onchange = e => {
-            let files = (e.target as HTMLInputElement).files
-            alert( "Size : " + files?.item(0)?.size );
-            // for (let file of Array.from(files)) {
-            //     alert(file)
-                // let item = document.createElement('li');
-                // item.textContent = files.webkitRelativePath;
-                // listing.appendChild(items);
-            // };
-        }
+        // this.fileSelector.onchange = e => {
+        //     let files = (e.target as HTMLInputElement).files
+        //     alert( "Size : " + files?.item(0)?.size );
+        // }
     }
 
 
-    selectFiles = () => {
+    selectDirectory = () => {
+        window.ipcRenderer.send('open-dir-dialog');
         // this.fileSelector.click();
 
     }
@@ -44,8 +37,8 @@ export default class Reader extends Component {
             <Box h="32px" w={'100%'} bgColor="#343434"> 
                 <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
                     <TopMenuButton menuName="File">
-                        <ChildMenuButton name="Open Folder" onClick={()=>{this.selectFiles()}}/>
-                        <ChildMenuButton name="Open Recent" onClick={()=>{this.selectFiles()}}/>
+                        <ChildMenuButton name="Open Folder" onClick={()=>{this.selectDirectory()}}/>
+                        <ChildMenuButton name="Open Recent" onClick={()=>{this.selectDirectory()}}/>
                         <ChildMenuButton name="Save Project" onClick={()=>{}}/> 
                         <ChildMenuButton name="Exit project" onClick={()=>{}}/>
                     </TopMenuButton>
