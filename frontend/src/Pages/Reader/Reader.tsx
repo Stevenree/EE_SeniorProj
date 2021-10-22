@@ -6,57 +6,67 @@ import './Reader.css'
 import ChildMenuButton from 'src/global-components/MenuButtons/ChildMenuButton'
 import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
 declare var window: any;
+
+type ReaderState = {
+    image_urls: string[]|null
+}
 export default class Reader extends Component {
-    comic_folder_url:string = ""
-    // fileSelector:HTMLInputElement = document.createElement('input')
+
+    state:ReaderState = {
+        image_urls: null
+
+    }
 
     componentDidMount(){
-        // initialize the input element
-        // this.fileSelector.setAttribute('type', 'file');
-        // this.fileSelector.setAttribute('value', '');
-        // this.fileSelector.name = 'fileList'
-        // this.fileSelector.setAttribute('directory', '');
-        // this.fileSelector.setAttribute('webkitdirectory', '');
-
-        // this.fileSelector.onchange = e => {
-        //     let files = (e.target as HTMLInputElement).files
-        //     alert( "Size : " + files?.item(0)?.size );
-        // }
+        window.ipcRenderer.on('directory-nested-file-paths', (event:any, paths:string[])=>{
+            this.setState({image_urls: paths})
+        })
     }
-
 
     selectDirectory = () => {
+        // alert(this.state.image_urls)
         window.ipcRenderer.send('open-dir-dialog');
-        // this.fileSelector.click();
-
     }
 
+
     render() {
-        
         return (
-            <Box h="32px" w={'100%'} bgColor="#343434"> 
-                <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
-                    <TopMenuButton menuName="File">
-                        <ChildMenuButton name="Open Folder" onClick={()=>{this.selectDirectory()}}/>
-                        <ChildMenuButton name="Open Recent" onClick={()=>{this.selectDirectory()}}/>
-                        <ChildMenuButton name="Save Project" onClick={()=>{}}/> 
-                        <ChildMenuButton name="Exit project" onClick={()=>{}}/>
-                    </TopMenuButton>
+            <Box w="100%">
+                <Box h="32px" w={'100%'} bgColor="#343434"> 
+                    <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
 
-                    <TopMenuButton menuName="Edit"> 
-                    
-                    </TopMenuButton>
-                    
-                    <TopMenuButton menuName="View">
-                        <ChildMenuButton name="Fullscreen" onClick={()=>{}}/>
-                    </TopMenuButton>
+                        <TopMenuButton menuName="File">
+                            <ChildMenuButton name="Open Folder" onClick={()=>{this.selectDirectory()}}/>
+                            <ChildMenuButton name="Open Recent" onClick={()=>{this.selectDirectory()}}/>
+                            <ChildMenuButton name="Save Project" onClick={()=>{}}/> 
+                            <ChildMenuButton name="Exit project" onClick={()=>{}}/>
+                        </TopMenuButton>
 
-                    <TopMenuButton menuName="About" onClick={()=>{}}>
-                    
-                    </TopMenuButton>
-                </Flex>
+                        <TopMenuButton menuName="Edit"> 
+                        </TopMenuButton>
+                        
+                        <TopMenuButton menuName="View">
+                            <ChildMenuButton name="Fullscreen" onClick={()=>{}}/>
+                        </TopMenuButton>
+
+                        <TopMenuButton menuName="About" onClick={()=>{}}>
+                        </TopMenuButton>
+                    </Flex>
+
+                </Box>
+                <img src={""} alt={'nope'} />
+                {this.renderComicPage(0)}
             </Box>
+        )
+    }
 
+    private renderComicPage(index:number){
+        return (<>
+            {this.state.image_urls ? 
+                <img src={"file:///"+this.state.image_urls[index]} alt={"url doesnt work"} /> : 
+                <>URL IS NULL!</>
+            }
+            </>
         )
     }
 }

@@ -1,4 +1,3 @@
-
 const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -49,7 +48,7 @@ function createWindow() {
         win.close();
     })
 
-    ipc.on('open-dir-dialog', ()=>{
+    ipc.on('open-dir-dialog', async (event)=>{
         console.log("Opening directory browser");
         
         dialog.showOpenDialog(
@@ -57,9 +56,14 @@ function createWindow() {
         )
         .then(dir => {
             let dirPath = dir.filePaths[0];
-            fs.readdirSync(dir.filePaths[0]).forEach(file => {
-                console.log(path.join(dirPath, file))
+            let imagePaths = [];
+            fs.readdirSync(dir.filePaths[0]).forEach( async (file) => {
+                let filePath = path.join(dirPath, file);
+                await fs.promises.copyFile(filePath, '/src/assets/current-comic/');
+                console.log(filePath);
+                imagePaths.push(filePath);                
             })
+            event.sender.send('directory-nested-file-paths', imagePaths)
         })
     })
 
