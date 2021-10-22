@@ -53,23 +53,21 @@ function createWindow() {
         
         dialog.showOpenDialog(
             {properties: ['openDirectory']},
-        )
-        .then(dir => {
+        ).then( async (dir) => {
             let dirPath = dir.filePaths[0];
-            let imagePaths = [];
-            fs.readdirSync(dir.filePaths[0]).forEach( async (file) => {
-                let filePath = path.join(dirPath, file);
-                await fs.promises.copyFile(filePath, '/src/assets/current-comic/');
-                console.log(filePath);
-                imagePaths.push(filePath);                
-            })
-            event.sender.send('directory-nested-file-paths', imagePaths)
+            let imageData = [];
+            
+            fs.readdirSync(dirPath).forEach( (file) => {
+                let absFilePath = path.join(dirPath, file);
+                const fileBase64 = fs.readFileSync(absFilePath).toString('base64');
+                imageData.push(fileBase64);
+            });
+            event.sender.send('nested-images-base64', imageData);
         })
-    })
-
-    
-
+    });
 }
+
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

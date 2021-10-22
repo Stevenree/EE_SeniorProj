@@ -18,8 +18,8 @@ export default class Reader extends Component {
     }
 
     componentDidMount(){
-        window.ipcRenderer.on('directory-nested-file-paths', (event:any, paths:string[])=>{
-            this.setState({image_urls: paths})
+        window.ipcRenderer.on('nested-images-base64', (event:any, base64:string[])=>{
+            this.setState({image_urls: base64})
         })
     }
 
@@ -54,7 +54,7 @@ export default class Reader extends Component {
                     </Flex>
 
                 </Box>
-                <img src={""} alt={'nope'} />
+                {/* <img src={"./assets/temp/current-comic/000.jpg"} alt={'nope'} /> */}
                 {this.renderComicPage(0)}
             </Box>
         )
@@ -63,7 +63,7 @@ export default class Reader extends Component {
     private renderComicPage(index:number){
         return (<>
             {this.state.image_urls ? 
-                <img src={"file:///"+this.state.image_urls[index]} alt={"url doesnt work"} /> : 
+                <img src={`data:image/png;base64,${this.state.image_urls[55]}`} alt={`NOT WORKING!`} /> : 
                 <>URL IS NULL!</>
             }
             </>
