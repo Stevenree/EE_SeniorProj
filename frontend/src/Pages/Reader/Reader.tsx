@@ -5,37 +5,37 @@ import { AttachmentIcon } from '@chakra-ui/icons'
 import './Reader.css'
 import ChildMenuButton from 'src/global-components/MenuButtons/ChildMenuButton'
 import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
+declare var window: any;
+const dialog = window.electron.remote.dialog;
+
 export default class Reader extends Component {
-    
     comic_folder_url:string = ""
     fileSelector:HTMLInputElement = document.createElement('input')
 
     componentDidMount(){
         // initialize the input element
         this.fileSelector.setAttribute('type', 'file');
-        this.fileSelector.setAttribute('name', 'fileList');
-        this.fileSelector.setAttribute('webkitdirectory', 'multiple');
-        this.fileSelector.setAttribute('multiple', 'multiple');
+        this.fileSelector.setAttribute('value', '');
+        this.fileSelector.name = 'fileList'
+        this.fileSelector.setAttribute('directory', '');
+        this.fileSelector.setAttribute('webkitdirectory', '');
 
-        this.fileSelector.onchange = (e) => {alert("change event")}
-
-        this.fileSelector.addEventListener('change', e=>{
-            alert("CHANGE EVENT")
+        this.fileSelector.onchange = e => {
             let files = (e.target as HTMLInputElement).files
-            alert(files);
+            alert( "Size : " + files?.item(0)?.size );
             // for (let file of Array.from(files)) {
             //     alert(file)
                 // let item = document.createElement('li');
-                // item.textContent = file.webkitRelativePath;
-                // listing.appendChild(item);
+                // item.textContent = files.webkitRelativePath;
+                // listing.appendChild(items);
             // };
-        })
+        }
     }
 
 
     selectFiles = () => {
-        this.fileSelector.value="";
-        this.fileSelector.click();
+        // this.fileSelector.click();
+
     }
 
     render() {

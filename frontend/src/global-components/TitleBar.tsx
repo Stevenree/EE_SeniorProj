@@ -1,10 +1,9 @@
-// @ts-nocheck
 import { Box, Flex } from '@chakra-ui/layout'
 import { IconButton } from '@chakra-ui/react'
 import React, { Component } from 'react'
 import { CloseIcon, MinusIcon, CopyIcon } from '@chakra-ui/icons'
 import './TitleBar.css'
-
+declare var window: any;
 export default class TitleBar extends Component {
     render() {
         return (

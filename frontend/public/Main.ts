@@ -1,7 +1,8 @@
-const path = require('path');
 
 const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
+const path = require('path');
+const fs = require('fs');
 const ipc = ipcMain;
 
 
