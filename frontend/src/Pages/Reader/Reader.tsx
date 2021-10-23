@@ -1,26 +1,34 @@
 import { Box, Center, IconButton } from '@chakra-ui/react'
-import React, { Component, useRef } from 'react'
+import React, { Component, useCallback, useEffect, useReducer, useRef } from 'react'
 import { Flex, HStack, VStack} from '@chakra-ui/layout'
 import { AttachmentIcon } from '@chakra-ui/icons'
 import './Reader.css'
 import ChildMenuButton from 'src/global-components/MenuButtons/ChildMenuButton'
 import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
+import useKeyboardShortcut from './use-keyboard-shortcut'
+
 declare var window: any;
 
 type ReaderState = {
-    image_urls: string[]|null
+    image_urls: string[]|null,
+    total_images: number
 }
 export default class Reader extends Component {
 
     state:ReaderState = {
-        image_urls: null
-
+        image_urls: null,
+        total_images: 0
     }
 
     componentDidMount(){
-        window.ipcRenderer.on('nested-images-base64', (event:any, base64:string[])=>{
-            this.setState({image_urls: base64})
-        })
+        window.ipcRenderer.on(
+            'nested-images-base64', (event:any, base64:string[]) => {
+                this.setState({image_urls: base64, total_images: base64.length})
+            }
+        )
+
+        // useKeyboardShortcut(['LeftArrow'], ()=>{});
+
     }
 
     selectDirectory = () => {
