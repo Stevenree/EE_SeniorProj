@@ -15,11 +15,20 @@ export default function Reader() {
     const [page_count, setCount]  = React.useState(0);
     const [cur_page, setPage] = React.useState(0);
 
+    useKeyboardShortcut(["ArrowLeft"], 
+        () => { if (cur_page > 0) setPage(cur_page - 1)}
+    )
+    useKeyboardShortcut(["ArrowRight"], 
+        ()=>{ if (cur_page < page_count-1) setPage(cur_page + 1)}
+    )
+
+
     useEffect( () => {
         window.ipcRenderer.on(
             'nested-images-base64', (event:any, base64:string[]) => {
                 setUrls(base64);
                 setCount(base64.length);
+                setPage(0);
             }
         )
     }, [])
@@ -64,7 +73,7 @@ export default function Reader() {
 
             </Box>
         {renderPage()}
-        <div> {`Current Page: ${cur_page} / ${page_count}`} </div>
+        <div> {`Current Page: ${cur_page} / ${page_count-1}`} </div>
         </Box>
     )
 }
