@@ -47,5 +47,5 @@ export default class TitleBar extends Component {
 
             </Flex>
         )
-    }
+    }   
 }
