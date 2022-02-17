@@ -11,10 +11,10 @@ type DrawerStates = {
 const page_routes:route[] = [ 
 	{id:0, name:"Home", url:"/"},
 	{id:1, name:"Reader", url:"/reader"},
-	{id:2, name:"Translator", url:"/"},
-	{id:3, name:"Cleaner", url:"/"},
-	{id:4, name:"Cards", url:"/"},
-	{id:5, name:"Statistics", url:"/"},
+	// {id:2, name:"Translator", url:"/"},
+	// {id:3, name:"Cleaner", url:"/"},
+	// {id:4, name:"Cards", url:"/"},
+	// {id:5, name:"Statistics", url:"/"},
 	{id:6, name:"About", url:"/"},
 ]
 

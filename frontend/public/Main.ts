@@ -54,13 +54,31 @@ function createWindow() {
         dialog.showOpenDialog(
             {properties: ['openDirectory']},
         ).then( async (dir) => {
+            if (dir === undefined) return
             let dirPath = dir.filePaths[0];
             let imageData = [];
             
             fs.readdirSync(dirPath).forEach( (file) => {
                 let absFilePath = path.join(dirPath, file);
                 const fileBase64 = fs.readFileSync(absFilePath).toString('base64');
+                
+                // TO-DO
+                // Prepare the list of json objects to send over.
+                // const page = {}
+                // page["base64"] = fileBase64
+
+                // Grab the width and height of this base64 encoded file
+                // const img = new Image();
+                // img.onload = function() {
+                //     page["width"] = img.width
+                //     page["height"] = img.height
+
+                // }
+                // img.src = `data:image/png;base64,${page["base64"]}`
+                // console.log( page )
+                
                 imageData.push(fileBase64);
+
             });
             event.sender.send('nested-images-base64', imageData);
         })

@@ -10,9 +10,14 @@ import upArrow from 'src/assets/upArrow.png'
 
 declare var window: any;
 
+type manga_page = {
+    base64 : string,
+    width: number,
+    height: number,
+}
 
 export default function Reader() {
-    const [page_urls, setUrls] = React.useState([""]);
+    const [page_data, setPageData] = React.useState([""]);
     const [page_count, setCount]  = React.useState(0);
     const [cur_page, setPage] = React.useState(0);
 
@@ -27,7 +32,8 @@ export default function Reader() {
     useEffect( () => {
         window.ipcRenderer.on(
             'nested-images-base64', (event:any, base64:string[]) => {
-                setUrls(base64);
+                setPageData(base64);
+                // console.log(base64[0].width)
                 setCount(base64.length);
                 setPage(0);
             }
@@ -35,17 +41,16 @@ export default function Reader() {
     }, [])
 
     const selectDirectory = () => {
-        // alert(this.state.page_urls)
+        // alert(this.state.page_data)
         window.ipcRenderer.send('open-dir-dialog');
     }
 
     const renderPage = () => {
         return (<Center marginTop="25px">
-            {page_urls[0]!=="" ? 
-                
+            {page_data[0]!=="" ? 
                 <img 
-                    height="600px"
-                    src={`data:image/png;base64,${page_urls[cur_page]}`} 
+                    width={"800px"}
+                    src={`data:image/png;base64,${page_data[cur_page]}`} 
                     alt={`NOT WORKING!`} 
                 /> 
                 :
@@ -69,7 +74,7 @@ export default function Reader() {
     const renderPageCount = () => {
         return (
             <Center>
-            {page_urls[0]!=="" ? 
+            {page_data[0]!=="" ? 
                 `Current Page: ${cur_page} / ${page_count-1}` 
                 : ``
             }
