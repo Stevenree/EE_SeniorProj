@@ -10,14 +10,14 @@ import upArrow from 'src/assets/upArrow.png'
 
 declare var window: any;
 
-type manga_page = {
+type page = {
     base64 : string,
     width: number,
     height: number,
 }
 
 export default function Reader() {
-    const [page_data, setPageData] = React.useState([""]);
+    const [pages, setPages] = React.useState([ {"base64":"", "width":0, "height":0} ]);
     const [page_count, setCount]  = React.useState(0);
     const [cur_page, setPage] = React.useState(0);
 
@@ -31,26 +31,26 @@ export default function Reader() {
 
     useEffect( () => {
         window.ipcRenderer.on(
-            'nested-images-base64', (event:any, base64:string[]) => {
-                setPageData(base64);
+            'nested-images-base64', (event:any, pages:page[]) => {
+                setPages(pages);
                 // console.log(base64[0].width)
-                setCount(base64.length);
+                setCount(pages.length);
                 setPage(0);
             }
         )
     }, [])
 
     const selectDirectory = () => {
-        // alert(this.state.page_data)
+        // alert(this.state.pages)
         window.ipcRenderer.send('open-dir-dialog');
     }
 
     const renderPage = () => {
         return (<Center marginTop="25px">
-            {page_data[0]!=="" ? 
+            {pages[0].base64!=="" ? 
                 <img 
                     width={"800px"}
-                    src={`data:image/png;base64,${page_data[cur_page]}`} 
+                    src={`data:image/png;base64,${pages[cur_page].base64}`} 
                     alt={`NOT WORKING!`} 
                 /> 
                 :
@@ -74,10 +74,17 @@ export default function Reader() {
     const renderPageCount = () => {
         return (
             <Center>
-            {page_data[0]!=="" ? 
-                `Current Page: ${cur_page} / ${page_count-1}` 
-                : ``
-            }
+                <div>{ pages[0].base64 !=="" 
+                    ? `Current Page: ${cur_page} / ${page_count-1}` 
+                    : ``
+                }
+                </div>
+                <div>
+                    { pages[0].base64 !=="" 
+                        ? `Native Res: ${pages[cur_page].width} x ${pages[cur_page].height}` 
+                        : ``
+                    }
+                </div>
             </Center>
         )
     }

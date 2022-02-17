@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const ipc = ipcMain;
 const dialog = require('electron').dialog;
+const sizeOf = require('image-size')
 
 function createWindow() {
     // Create the browser window.
@@ -56,31 +57,24 @@ function createWindow() {
         ).then( async (dir) => {
             if (dir === undefined) return
             let dirPath = dir.filePaths[0];
-            let imageData = [];
+            let pages = [];
             
             fs.readdirSync(dirPath).forEach( (file) => {
                 let absFilePath = path.join(dirPath, file);
-                const fileBase64 = fs.readFileSync(absFilePath).toString('base64');
+                let fileBase64 = fs.readFileSync(absFilePath, 'base64')
+                // console.log( fileBase64.toString() )
+                const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
                 
                 // TO-DO
                 // Prepare the list of json objects to send over.
-                // const page = {}
-                // page["base64"] = fileBase64
-
-                // Grab the width and height of this base64 encoded file
-                // const img = new Image();
-                // img.onload = function() {
-                //     page["width"] = img.width
-                //     page["height"] = img.height
-
-                // }
-                // img.src = `data:image/png;base64,${page["base64"]}`
-                // console.log( page )
-                
-                imageData.push(fileBase64);
+                const page = {}
+                page["base64"] = fileBase64
+                page["width"] = dimensions.width
+                page["height"] = dimensions.height
+                pages.push(page);
 
             });
-            event.sender.send('nested-images-base64', imageData);
+            event.sender.send('nested-images-base64', pages);
         })
     });
 }
