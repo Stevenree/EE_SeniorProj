@@ -20,7 +20,7 @@ function createWindow() {
             preload: __dirname + "/preload.js",
             // devTools: true,
         },
-    });
+    })
 
     win.loadURL('http://localhost:3000/')
 

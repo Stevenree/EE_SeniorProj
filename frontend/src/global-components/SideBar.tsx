@@ -1,8 +1,8 @@
-import { Box, Center, Link, VStack } from '@chakra-ui/layout'
+import { Box, Center, VStack } from '@chakra-ui/layout'
 import React, { Component } from 'react'
 import { IconButton, Text } from '@chakra-ui/react'
 import { route } from './types'
-import { ArrowBackIcon, ArrowForwardIcon, ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, ArrowForwardIcon} from '@chakra-ui/icons'
 
 type DrawerStates = {
 	isOpen: boolean,

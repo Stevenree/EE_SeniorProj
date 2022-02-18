@@ -1,12 +1,13 @@
-import { Box, Button, Center, IconButton, Text } from '@chakra-ui/react'
-import React, { Component, useCallback, useEffect, useReducer, useRef } from 'react'
-import { Flex, HStack, VStack} from '@chakra-ui/layout'
+import { Box, Center, IconButton, Text } from '@chakra-ui/react'
+import React, { useEffect, useRef } from 'react'
+import { Flex, VStack} from '@chakra-ui/layout'
 import { AttachmentIcon } from '@chakra-ui/icons'
 import './Reader.css'
 import ChildMenuButton from 'src/global-components/MenuButtons/ChildMenuButton'
 import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
 import useKeyboardShortcut from './use-keyboard-shortcut'
 import upArrow from 'src/assets/upArrow.png'
+import TextRegion from './TextRegion'
 
 declare var window: any;
 
@@ -18,16 +19,17 @@ type page = {
 
 export default function Reader() {
     const [pages, setPages] = React.useState([ {"base64":"", "width":0, "height":0} ]);
+    
     const [page_count, setCount]  = React.useState(0);
     const [cur_page, setPage] = React.useState(0);
 
     useKeyboardShortcut(["ArrowLeft"], 
         () => { if (cur_page > 0) setPage(cur_page - 1)}
     )
+    
     useKeyboardShortcut(["ArrowRight"], 
         ()=>{ if (cur_page < page_count-1) setPage(cur_page + 1)}
     )
-
 
     useEffect( () => {
         window.ipcRenderer.on(
@@ -38,6 +40,7 @@ export default function Reader() {
                 setPage(0);
             }
         )
+
     }, [])
 
     const selectDirectory = () => {
@@ -46,27 +49,46 @@ export default function Reader() {
     }
 
     const renderPage = () => {
-        return (<Center marginTop="25px">
-            {pages[0].base64!=="" ? 
-                <img 
-                    width={"800px"}
-                    src={`data:image/png;base64,${pages[cur_page].base64}`} 
-                    alt={`NOT WORKING!`} 
-                /> 
-                :
-                <VStack>
-                    <IconButton 
-                        aria-label="load-comic" 
-                        icon={<AttachmentIcon boxSize="50px"/>} 
-                        onClick={selectDirectory} 
-                        marginTop={"0px"} bgColor="orange.300"  boxSize="100px"
-                        _hover={{backgroundColor: "orange.400"}}
-                        borderRadius="100px"
-                    />
-                    <img src={upArrow} />   
-                    <Text color="blackAlpha.600" userSelect='none'> Begin by uploading your comic above! </Text>
-                </VStack>
-            }
+        return ( 
+            <Center marginTop="25px">
+                { pages[0].base64!== "" 
+                    ? <div className="image-container" >
+                        <TextRegion 
+                            xyxy={ [664, 458, 722, 676] } 
+                            naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
+                        />
+                        <TextRegion 
+                            xyxy={ [384,62,446,172] } 
+                            naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
+                        />
+                        <TextRegion 
+                            xyxy={ [1222,871,1260,947] } 
+                            naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
+                        />
+                        <TextRegion 
+                            xyxy={ [1144,561,1263,677] } 
+                            naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
+                        />
+                        <img 
+                            // width={800}
+                            src={`data:image/png;base64,${pages[cur_page].base64}`} 
+                            alt={`NOT WORKING!`} 
+                            id={'page'}
+                        />
+                    </div> 
+                    : <VStack>
+                        <IconButton 
+                            aria-label="load-comic" 
+                            icon={<AttachmentIcon boxSize="50px"/>} 
+                            onClick={selectDirectory} 
+                            marginTop={"0px"} bgColor="orange.300"  boxSize="100px"
+                            _hover={{backgroundColor: "orange.400"}}
+                            borderRadius="100px"
+                        />
+                        <img src={upArrow} />   
+                        <Text color="blackAlpha.600" userSelect='none'> Begin by uploading your comic above! </Text>
+                    </VStack>
+                }
             </Center>
         )
     }
@@ -75,16 +97,16 @@ export default function Reader() {
         return (
             <Center>
                 <div>{ pages[0].base64 !=="" 
-                    ? `Current Page: ${cur_page} / ${page_count-1}` 
+                    ? `${cur_page} / ${page_count-1}` 
                     : ``
                 }
                 </div>
-                <div>
+                {/* <div>
                     { pages[0].base64 !=="" 
                         ? `Native Res: ${pages[cur_page].width} x ${pages[cur_page].height}` 
                         : ``
                     }
-                </div>
+                </div> */}
             </Center>
         )
     }
@@ -115,6 +137,7 @@ export default function Reader() {
             </Box>
         {renderPage()}
         {renderPageCount()}
+
         </Box>
     )
 }

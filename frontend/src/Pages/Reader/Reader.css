@@ -1,3 +1,16 @@
 .noselect {
     user-select: none;
 }
+
+.image-container{
+    position:       relative;
+    text-align:     center;
+    color:          red;
+}
+
+.text-region{
+    background-color: rgba(255,0,0,0.9);
+}
+.text-region:hover{
+    background-color: rgba(251, 255, 0, 0.473);
+}
