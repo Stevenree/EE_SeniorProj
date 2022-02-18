@@ -1,5 +1,5 @@
-import { Box, Center, IconButton, Text } from '@chakra-ui/react'
-import React, { useEffect, useRef } from 'react'
+import { Box, Button, Center, IconButton, Text } from '@chakra-ui/react'
+import React, { EventHandler, useEffect, useRef, WheelEventHandler } from 'react'
 import { Flex, VStack} from '@chakra-ui/layout'
 import { AttachmentIcon } from '@chakra-ui/icons'
 import './Reader.css'
@@ -19,7 +19,7 @@ type page = {
 
 export default function Reader() {
     const [pages, setPages] = React.useState([ {"base64":"", "width":0, "height":0} ]);
-    
+    const [pageWidth, setPageWidth] = React.useState(800)
     const [page_count, setCount]  = React.useState(0);
     const [cur_page, setPage] = React.useState(0);
 
@@ -40,7 +40,6 @@ export default function Reader() {
                 setPage(0);
             }
         )
-
     }, [])
 
     const selectDirectory = () => {
@@ -52,7 +51,13 @@ export default function Reader() {
         return ( 
             <Center marginTop="25px">
                 { pages[0].base64!== "" 
-                    ? <div className="image-container" >
+                    ? <div className="image-container" 
+                        onWheel={(e) => {
+                            if (e.ctrlKey)
+                                if ( e.deltaY>0 )   setPageWidth(pageWidth+50)
+                                else                setPageWidth(pageWidth-50)
+                        }}
+                    >
                         <TextRegion 
                             xyxy={ [664, 458, 722, 676] } 
                             naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
@@ -70,7 +75,7 @@ export default function Reader() {
                             naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
                         />
                         <img 
-                            // width={800}
+                            width={pageWidth}
                             src={`data:image/png;base64,${pages[cur_page].base64}`} 
                             alt={`NOT WORKING!`} 
                             id={'page'}
