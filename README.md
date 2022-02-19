@@ -5,6 +5,9 @@ This project will incorporate modern ML techniques for [automatic manga translat
 
 ## Dependencies
 1. npm
+2. Python3
+3. Flask
+4. Detectronv2
 
 ## Usage
 Start app (dev, not build) by typing in the root directory:
