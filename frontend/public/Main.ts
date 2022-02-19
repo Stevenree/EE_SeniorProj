@@ -60,21 +60,27 @@ function createWindow() {
             let pages = [];
             
             fs.readdirSync(dirPath).forEach( (file) => {
+                console.log( file )
                 let absFilePath = path.join(dirPath, file);
                 let fileBase64 = fs.readFileSync(absFilePath, 'base64')
                 // console.log( fileBase64.toString() )
                 const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
                 
-                // TO-DO
-                // Prepare the list of json objects to send over.
                 const page = {}
                 page["base64"] = fileBase64
                 page["width"] = dimensions.width
                 page["height"] = dimensions.height
+                // put the pages through the model here
                 pages.push(page);
 
             });
-            event.sender.send('nested-images-base64', pages);
+            
+            if (pages.length !== 0)
+                event.sender.send('post-manga-folder', pages);
+            else
+                // currently the frontend does not have a handler for this res
+                event.sender.send('error-empty-folder')
+
         })
     });
 }

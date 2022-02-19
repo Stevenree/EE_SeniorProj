@@ -33,7 +33,7 @@ export default function Reader() {
 
     useEffect( () => {
         window.ipcRenderer.on(
-            'nested-images-base64', (event:any, pages:page[]) => {
+            'post-manga-folder', (event:any, pages:page[]) => {
                 setPages(pages);
                 // console.log(base64[0].width)
                 setCount(pages.length);
@@ -122,7 +122,7 @@ export default function Reader() {
                 <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
 
                     <TopMenuButton menuName="File">
-                        <ChildMenuButton name="Open Folder" onClick={()=>{selectDirectory()}}/>
+                        <ChildMenuButton name="Open Folder" onClick={selectDirectory}/>
                         <ChildMenuButton name="Open Recent" onClick={selectDirectory}/>
                         <ChildMenuButton name="Save Project" onClick={()=>{}}/> 
                         <ChildMenuButton name="Exit project" onClick={()=>{}}/>

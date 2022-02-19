@@ -16,6 +16,8 @@ export default function TextRegion(props:any) {
 	const naturalWidth = props.naturalArea[0]
 	const naturalHeight = props.naturalArea[1]
 
+	const rawText = props.text
+
 	return (
 		<div>
 			<Box className="text-region"
