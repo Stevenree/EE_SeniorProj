@@ -1,5 +1,5 @@
-import { Box, Button, Center, IconButton, Text } from '@chakra-ui/react'
-import React, { EventHandler, useEffect, useRef, WheelEventHandler } from 'react'
+import { Box, Center, IconButton, Text } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 import { Flex, VStack} from '@chakra-ui/layout'
 import { AttachmentIcon } from '@chakra-ui/icons'
 import './Reader.css'
@@ -90,7 +90,7 @@ export default function Reader() {
                             _hover={{backgroundColor: "orange.400"}}
                             borderRadius="100px"
                         />
-                        <img src={upArrow} />   
+                        <img src={upArrow} alt={"^"} />   
                         <Text color="blackAlpha.600" userSelect='none'> Begin by uploading your comic above! </Text>
                     </VStack>
                 }

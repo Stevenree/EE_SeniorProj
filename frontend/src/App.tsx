@@ -9,7 +9,6 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
 } from "react-router-dom"
 import Reader from "./Pages/Reader/Reader.tsx";
 import Home from "./Pages/Home.tsx";

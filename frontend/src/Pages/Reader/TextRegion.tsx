@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import React, { Component, useRef } from 'react'
+import React from 'react'
 
 
 export default function TextRegion(props:any) {
