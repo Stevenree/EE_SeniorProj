@@ -8,9 +8,45 @@
     color:          red;
 }
 
-.text-region{
-    background-color: rgba(255,0,0,0.9);
+.page{
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
 }
+
+.text-region{
+    /* border-color: rgba(255,0,0,0.5); */
+    /* border-width: 2px; */
+    /* border-style: solid; */
+    /* border-radius: 3px; */
+    user-drag: none;
+    z-index: 10;
+}
+
 .text-region:hover{
     background-color: rgba(251, 255, 0, 0.473);
+}
+
+.text-reveal-region{
+    color: rgba(0,0,0,0.700);
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    /* white-space: nowrap; */
+    max-width: 60%;
+    border-width: 1px;
+    border-color: rgba(7, 7, 7, 0.7);
+    border-radius: 15px;
+    border-style: solid;
+    z-index: 100;
+    font-size: 1vw;
+    font-family: Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+
 }

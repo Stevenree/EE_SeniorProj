@@ -60,7 +60,6 @@ function createWindow() {
             let pages = [];
             
             fs.readdirSync(dirPath).forEach( (file) => {
-                console.log( file )
                 let absFilePath = path.join(dirPath, file);
                 let fileBase64 = fs.readFileSync(absFilePath, 'base64')
                 // console.log( fileBase64.toString() )

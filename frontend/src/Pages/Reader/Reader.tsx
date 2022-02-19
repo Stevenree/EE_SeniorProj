@@ -58,26 +58,32 @@ export default function Reader() {
                                 else                setPageWidth(pageWidth-50)
                         }}
                     >
-                        <TextRegion 
+                        {/* <TextRegion 
                             xyxy={ [664, 458, 722, 676] } 
                             naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
-                        />
+                            rawText={"準備OK!!"}
+                        /> */}
                         <TextRegion 
-                            xyxy={ [384,62,446,172] } 
+                            xyxy={ [420,200,510,300] } 
                             naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
+                            rawText={"お願い"}
+
                         />
-                        <TextRegion 
+                        {/* <TextRegion 
                             xyxy={ [1222,871,1260,947] } 
                             naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
+                            rawText={"ではさっそく"}
                         />
                         <TextRegion 
                             xyxy={ [1144,561,1263,677] } 
                             naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
-                        />
+                            rawText={"つ…ついに買ったのね！！　ビカビカのひとり用炊飯器を！！"}
+                        /> */}
                         <img 
                             width={pageWidth}
                             src={`data:image/png;base64,${pages[cur_page].base64}`} 
                             alt={`NOT WORKING!`} 
+                            className={"page"}
                             id={'page'}
                         />
                     </div> 
@@ -117,7 +123,7 @@ export default function Reader() {
     }
 
     return (
-        <Box w="100%" h="100%" overflowY="hidden">
+        <Box w="100%" h="100%" overflowY="hidden" bgColor="#fdfffc">
             <Box h="32px" w={'100%'} bgColor="#343434"> 
                 <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
 
