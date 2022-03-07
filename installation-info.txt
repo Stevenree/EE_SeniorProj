@@ -1,0 +1,5 @@
+Flask virtual environment : Python 3.9+
+Please install these while inside of the virtual environment
+
+pip install torch==1.8.0 -f https://download.pytorch.org/whl/cpu/torch/
+pip install Pillow
