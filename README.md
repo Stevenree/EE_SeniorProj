@@ -12,7 +12,16 @@ This project will incorporate modern ML techniques for [automatic manga translat
 ## Usage
 Start app (dev, not build) by typing in the root directory:
 ```
+\\ frontend
+cd frontend
 npm run dev
+
+\\ backend
+cd flask
+venv/Scripts/activate.bat
+SET FLASK_APP=main.py
+SET FLASK_DEV=development
+flask run
 ```
 -Blank-
 

@@ -55,21 +55,31 @@ function createWindow() {
         dialog.showOpenDialog(
             {properties: ['openDirectory']},
         ).then( async (dir) => {
-            if (dir === undefined) return
+            if (dir === undefined) return;
             let dirPath = dir.filePaths[0];
             let pages = [];
-            
+
+            // Move to other function, figure out how to make it not block UI thread
             fs.readdirSync(dirPath).forEach( (file) => {
                 let absFilePath = path.join(dirPath, file);
                 let fileBase64 = fs.readFileSync(absFilePath, 'base64')
-                // console.log( fileBase64.toString() )
                 const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
-                
                 const page = {}
                 page["base64"] = fileBase64
                 page["width"] = dimensions.width
                 page["height"] = dimensions.height
+                
                 // put the pages through the model here
+                const data = fileBase64;
+                const headers = {
+                    'content-type': 'image/jpg',
+                    'body':data,
+                    'method': 'post',
+                }
+                const url = "http://localhost:5000/infer"
+                fetch(url, headers)
+
+
                 pages.push(page);
 
             });
