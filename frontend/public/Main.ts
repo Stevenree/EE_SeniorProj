@@ -4,7 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const ipc = ipcMain;
 const dialog = require('electron').dialog;
-const sizeOf = require('image-size')
+const sizeOf = require('image-size');
+const fetch = require('node-fetch');
 
 function createWindow() {
     // Create the browser window.
@@ -59,8 +60,12 @@ function createWindow() {
             let dirPath = dir.filePaths[0];
             let pages = [];
 
+            const files = fs.readdirSync(dirPath)
+            // counter so that at last .foreach iter we ipc send
+            let filesProcessed = 0; 
+
             // Move to other function, figure out how to make it not block UI thread
-            fs.readdirSync(dirPath).forEach( (file) => {
+            files.forEach( (file) => {
                 let absFilePath = path.join(dirPath, file);
                 let fileBase64 = fs.readFileSync(absFilePath, 'base64')
                 const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
@@ -77,19 +82,24 @@ function createWindow() {
                     'method': 'post',
                 }
                 const url = "http://localhost:5000/infer"
-                fetch(url, headers)
-
-
-                pages.push(page);
-
-            });
-            
-            if (pages.length !== 0)
-                event.sender.send('post-manga-folder', pages);
-            else
-                // currently the frontend does not have a handler for this res
-                event.sender.send('error-empty-folder')
-
+                fetch(url, headers).then( (res) =>{
+                    res.json()
+                    .then( (boxes) => {
+                        page['boxes'] = boxes
+                        pages.push(page);
+                        filesProcessed++;
+                    })
+                    .then( () => {
+                        if ( filesProcessed === files.length){
+                            console.log("EVENT SENDER | post-manga-folder");
+                            event.sender.send('post-manga-folder', pages);
+                        } else {
+                            console.log("EVENT SENDER | error-empty-folder");
+                            event.sender.send('error-empty-folder')
+                        }
+                    })
+                })
+            })
         })
     });
 }

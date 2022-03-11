@@ -15,10 +15,23 @@ type page = {
   base64: string,
   width: number,
   height: number,
+  boxes: box[],
+}
+
+type box = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
 }
 
 export default function Reader() {
-  const [pages, setPages] = React.useState([{ "base64": "", "width": 0, "height": 0 }]);
+  const [pages, setPages] = React.useState([{ 
+    "base64": "", 
+    "width": 0, 
+    "height": 0, 
+    "boxes":[{'xmin':0, 'ymin':0, 'xmax':0, 'ymax':0}] }]);
+
   const [pageWidth, setPageWidth] = React.useState(800)
   const [page_count, setCount] = React.useState(0);
   const [cur_page, setPage] = React.useState(0);
@@ -35,7 +48,7 @@ export default function Reader() {
     window.ipcRenderer.on(
       'post-manga-folder', (event: any, pages: page[]) => {
         setPages(pages);
-        // console.log(base64[0].width)
+        console.log(pages[0])
         setCount(pages.length);
         setPage(0);
       }
@@ -45,6 +58,19 @@ export default function Reader() {
   const selectDirectory = () => {
     // alert(this.state.pages)
     window.ipcRenderer.send('open-dir-dialog');
+  }
+
+  const renderBoxes = () => {
+    return pages[cur_page].boxes.map( (box:box, i) => {
+      console.log(box);
+      return(
+        <TextRegion
+          xyxy={[box.xmin, box.ymin, box.xmax, box.ymax]}
+          naturalArea={[pages[cur_page].width, pages[cur_page].height]}
+          rawText={"..."}
+        />
+      )
+    })
   }
 
   const renderPage = () => {
@@ -58,26 +84,7 @@ export default function Reader() {
                 else setPageWidth(pageWidth - 50)
             }}
           >
-            <TextRegion
-              xyxy={[664, 458, 722, 676]}
-              naturalArea={[pages[cur_page].width, pages[cur_page].height]}
-              rawText={"準備OK!!"}
-            />
-            {/* <TextRegion 
-              xyxy={ [420,200,510,300] } 
-              naturalArea={ [ pages[cur_page].width, pages[cur_page].height ]} 
-              rawText={"お願い"}
-            /> */}
-            <TextRegion
-              xyxy={[1222, 871, 1260, 947]}
-              naturalArea={[pages[cur_page].width, pages[cur_page].height]}
-              rawText={"ではさっそく"}
-            />
-            <TextRegion
-              xyxy={[1144, 561, 1263, 677]}
-              naturalArea={[pages[cur_page].width, pages[cur_page].height]}
-              rawText={"つ…ついに買ったのね！！　ビカビカのひとり用炊飯器を！！"}
-            />
+            {renderBoxes()}
             <img
               width={pageWidth}
               src={`data:image/png;base64,${pages[cur_page].base64}`}
