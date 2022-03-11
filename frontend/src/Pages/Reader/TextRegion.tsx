@@ -22,6 +22,10 @@ export default function TextRegion(props:any) {
 	}
 	const rawText = props.rawText
 
+	const getZIndex = () => {
+		let area = (xmax-xmin) * (ymax - ymin)
+		return Math.round(100000/area)
+	}
 	return (
 		<div>
 
@@ -32,6 +36,7 @@ export default function TextRegion(props:any) {
 						top =　{ (ymin/naturalHeight)*100  + "%"}
 						onMouseEnter = {() => setShowText(true)}
 						onMouseLeave = {() => setShowText(false)}
+						zIndex = {100000}
 					>
 						{rawText}
 					</Box>
@@ -43,8 +48,10 @@ export default function TextRegion(props:any) {
 				width	={ ((xmax-xmin)/naturalWidth)*100 + "%" }
 				top 	={ (ymin/naturalHeight)*100 + "%"}
 				height	={ ((ymax-ymin)/naturalHeight)*100 + "%"}
+				zIndex = { getZIndex() }
 				onMouseEnter = {() => setShowText(true)}
 				onMouseLeave = {() => setShowText(false)}
+
 			>
 			</Box>
 		</div>
