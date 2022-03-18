@@ -23,6 +23,7 @@ type box = {
   ymin: number,
   xmax: number,
   ymax: number,
+  text: string,
 }
 
 export default function Reader() {
@@ -30,7 +31,7 @@ export default function Reader() {
     "base64": "", 
     "width": 0, 
     "height": 0, 
-    "boxes":[{'xmin':0, 'ymin':0, 'xmax':0, 'ymax':0}] }]);
+    "boxes":[{'xmin':0, 'ymin':0, 'xmax':0, 'ymax':0, 'text':""}] }]);
 
   const [pageWidth, setPageWidth] = React.useState(800)
   const [page_count, setCount] = React.useState(0);
@@ -67,7 +68,7 @@ export default function Reader() {
         <TextRegion
           xyxy={[box.xmin, box.ymin, box.xmax, box.ymax]}
           naturalArea={[pages[cur_page].width, pages[cur_page].height]}
-          rawText={"..."}
+          rawText={box.text}
         />
       )
     })

@@ -85,6 +85,7 @@ function createWindow() {
                 fetch(url, headers).then( (res) =>{
                     res.json()
                     .then( (boxes) => {
+                        console.log(boxes)
                         page['boxes'] = boxes
                         pages.push(page);
                         filesProcessed++;

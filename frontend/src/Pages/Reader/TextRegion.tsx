@@ -32,8 +32,8 @@ export default function TextRegion(props:any) {
 			{ showText 
 				?	<Box className="text-reveal-region"
 						position={'absolute'}
-						left =　{ (xmin/naturalWidth)*100  + "%" } 
-						top =　{ (ymin/naturalHeight)*100  + "%"}
+						left =　{ (xmin/naturalWidth)*100  + 5 + "%" } 
+						top =　{ (ymin/naturalHeight)*100  - 5 + "%"}
 						onMouseEnter = {() => setShowText(true)}
 						onMouseLeave = {() => setShowText(false)}
 						zIndex = {100000}
