@@ -3,3 +3,16 @@ Please install these while inside of the virtual environment
 
 pip install torch==1.8.0 -f https://download.pytorch.org/whl/cpu/torch/
 pip install Pillow
+
+
+
+OCR
+---
+https://github.com/UB-Mannheim/tesseract/wiki
+- Ensure that you install the japanese vertical dataset
+- Ensure you can envoke 'tesseract' command from terminal
+py -m pip install pytesseract
+
+In order to run this in virtual environment, you need to add tesseract to the venv PATH, or make a macro
+-  doskey tesseract=/"Program Files"/Tesseract-OCR/tesseract.exe
+

@@ -10,11 +10,13 @@ import numpy as np
 import torch
 import time
 import base64
+import pytesseract
 
 model = torch.jit.load("models/ts-model_final-cpu.pt")
 model.eval()
 ratioTransformer = ImageRatioTransform( shortest_length=800, max_length=1333)
-
+custom_fig = r'--oem 3 --psm 5'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 def inferBoxes(model:any, transformer:any, img_data:any) -> list[list[int]]:
   '''
@@ -22,22 +24,26 @@ def inferBoxes(model:any, transformer:any, img_data:any) -> list[list[int]]:
   Returns region in the form of [ [x1, y1, x2, y2], ...]
   '''
   t1 = time.time()
+  
   formatted_inputs = transformer.getTransform(img_data).apply_transform( tensor_format=True, device="cpu" )
   scale = formatted_inputs[1][0][2]
   pred = model(formatted_inputs)
   boxes = pred[0] * scale
+  boxes = boxes.cpu().data.numpy()
+
+  json_arr = []
+
+  for i in boxes:
+    img_roi = img_data[int(i[1]):int(i[3]), int(i[0]-4):int(i[2]+4)]
+    ocr_result = pytesseract.image_to_string(img_roi, 'jpn_vert', config=custom_fig) # str
+    ocr_result = ocr_result.replace("\n", "")
+    ocr_result = ocr_result.replace(" ", "")
+    json_arr.append( {'xmin':i[0], 'ymin':i[1], 'xmax':i[2], 'ymax':i[3], 'text':ocr_result} )
+
   t2 = time.time()
   print(t2-t1)
-  return boxes
-# with Image.open("001.jpg") as f:
-#   data = np.asarray(f) # H,W,C
-#   data = data[:,:,::-1] # RGB--> BGR
-
-def inferenceToList(boxes:torch.Tensor):
-  lst = []
-  for x in boxes:
-    lst.append( {'xmin':x[0].item(), 'ymin':x[1].item(), 'xmax':x[2].item(), 'ymax':x[3].item()} )
-  return lst
+  print(json_arr)
+  return json_arr
 
 app = Flask(__name__)
 
@@ -58,8 +64,7 @@ def infer():
     data = data[:,:,::-1]       # RGB --> BGR
 
     inf = inferBoxes(model, ratioTransformer, data)
-    inf_list = inferenceToList(inf)
-    inf_json = json.dumps(inf_list)
+    inf_json = json.dumps(inf)
 
     res = Response(inf_json)
     res.headers["content-type"] = 'application/json'
