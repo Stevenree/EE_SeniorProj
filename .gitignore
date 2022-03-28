@@ -1,4 +1,4 @@
 node_modules/
 *.pt
 flask/venv/Lib/site-packages/torch/*
-flask/venv/Lin/site-packages/*
+flask/venv/Lib/site-packages/*

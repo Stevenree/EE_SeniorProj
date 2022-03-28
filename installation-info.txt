@@ -8,6 +8,12 @@ pip install Pillow
 
 OCR
 ---
+python -m pip install wheel setuptools
+
+pip install -U spacy
+python -m spacy download ja_core_news_sm
+pip install --upgrade jamdict jamdict-data
+
 https://github.com/UB-Mannheim/tesseract/wiki
 - Ensure that you install the japanese vertical dataset
 - Ensure you can envoke 'tesseract' command from terminal
