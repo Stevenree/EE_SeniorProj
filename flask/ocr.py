@@ -20,15 +20,20 @@ class OCR():
     '''
     p = padding
     left, top, right, down = int(xyxy[0]-p), int(xyxy[1]-p), int(xyxy[2]+p), int(xyxy[3]+p)
-    print(left, top, right, down)
     img_roi = original_img[top:down, left:right]
-    print(img_roi.shape)
 
     text = pytesseract.image_to_string(img_roi, 'jpn_vert', config=self.custom_fig) # str
     text = text.replace("\n", "")
     text = text.replace(" ", "")
-    print(text)
-    return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':down, 'text':text}
+    tokens = self.tokenize(text)
+    return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':down, 'tokens':tokens}
+
+  def tokenize(self, text:str) -> List:
+    word_collection = []
+    doc = self.nlp(text)
+    for token in doc:
+      word_collection.append({"token":token.text})
+    return word_collection
 
 # if  __name__ == "__main__":
 #   print("Finished imports")

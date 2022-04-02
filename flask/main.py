@@ -36,11 +36,7 @@ def inferBoxes(model:any, transformer:any, img_data:any) -> List[List[int]]:
 
   for i in regions:
     json_arr.append( ocr.recognizeRegion(img_data, i, padding=0) )
-    # img_roi = img_data[int(i[1]-4):int(i[3]+4), int(i[0]-4):int(i[2]+4)]
-    # ocr_result = pytesseract.image_to_string(img_roi, 'jpn_vert', config=custom_fig) # str
-    # ocr_result = ocr_result.replace("\n", "")
-    # ocr_result = ocr_result.replace(" ", "")
-    # json_arr.append( {'xmin':int(i[0]), 'ymin':int(i[1]), 'xmax':int(i[2]), 'ymax':int(i[3]), 'text':ocr_result} )
+
 
   t2 = time.time()
   print(t2-t1)
