@@ -26,7 +26,7 @@ class OCR():
     text = text.replace("\n", "")
     text = text.replace(" ", "")
     tokens = self.tokenize(text)
-    return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':down, 'tokens':tokens}
+    return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':down, 'text':tokens}
 
   def tokenize(self, text:str) -> List:
     word_collection = []

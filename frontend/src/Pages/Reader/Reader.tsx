@@ -23,15 +23,27 @@ type box = {
   ymin: number,
   xmax: number,
   ymax: number,
-  text: string,
+  text: word[],
 }
+
+type word = {
+  token: string,
+}
+
 
 export default function Reader() {
   const [pages, setPages] = React.useState([{ 
     "base64": "", 
     "width": 0, 
     "height": 0, 
-    "boxes":[{'xmin':0, 'ymin':0, 'xmax':0, 'ymax':0, 'text':""}] }]);
+    "boxes":[{
+      'xmin':0, 
+      'ymin':0, 
+      'xmax':0, 
+      'ymax':0, 
+      'text':[{'token':''}]
+      }] 
+  }]);
 
   const [pageWidth, setPageWidth] = React.useState(800)
   const [page_count, setCount] = React.useState(0);
@@ -68,7 +80,7 @@ export default function Reader() {
         <TextRegion
           xyxy={[box.xmin, box.ymin, box.xmax, box.ymax]}
           naturalArea={[pages[cur_page].width, pages[cur_page].height]}
-          rawText={box.text}
+          tokens={box.text}
         />
       )
     })

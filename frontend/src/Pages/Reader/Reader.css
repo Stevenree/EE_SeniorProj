@@ -49,5 +49,8 @@
     z-index: 100;
     font-size: 1vw;
     font-family: Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
 
+.token:hover{
+    background-color: rgba(251, 255, 0, 0.473);
 }

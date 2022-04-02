@@ -35,7 +35,7 @@ def inferBoxes(model:any, transformer:any, img_data:any) -> List[List[int]]:
   json_arr = []
 
   for i in regions:
-    json_arr.append( ocr.recognizeRegion(img_data, i, padding=0) )
+    json_arr.append( ocr.recognizeRegion(img_data, i, padding=4) )
 
 
   t2 = time.time()

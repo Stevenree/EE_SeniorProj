@@ -40,6 +40,7 @@ flask run
 - Rudimentary OCR
 
 ## Features to be added
+- Put all types in a single file and import as needed
 - Improved OCR detection (Remove furigana & noise)
 - Dictionary lookup
 - (Base Final Goal) Anki Integration

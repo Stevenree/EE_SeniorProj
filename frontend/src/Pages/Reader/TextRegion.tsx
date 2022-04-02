@@ -1,6 +1,11 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
 
+// seperate 
+type word = {
+  token: string,
+}
+
 
 export default function TextRegion(props:any) {
 	
@@ -20,11 +25,18 @@ export default function TextRegion(props:any) {
 	const toggleText = () => {
 		showText ? setShowText(false) : setShowText(true)
 	}
-	const rawText = props.rawText
+	const tokens:word[] = props.tokens
 
 	const getZIndex = () => {
 		let area = (xmax-xmin) * (ymax - ymin)
 		return Math.round(100000/area)
+	}
+
+	const formSentenceFromTokens = (words:word[]) => {
+		return words.map( (word:word) => {
+			return <span className='token'>{word.token}</span>
+		})
+
 	}
 	return (
 		<div>
@@ -35,10 +47,10 @@ export default function TextRegion(props:any) {
 						left =　{ (xmin/naturalWidth)*100  + 5 + "%" } 
 						top =　{ (ymin/naturalHeight)*100  - 5 + "%"}
 						onMouseEnter = {() => setShowText(true)}
-						onMouseLeave = {() => setShowText(false)}
+						// onMouseLeave = {() => setShowText(false)}
 						zIndex = {100000}
 					>
-						{rawText}
+						{formSentenceFromTokens(tokens)}
 					</Box>
 				: <></>
 			}
@@ -50,8 +62,7 @@ export default function TextRegion(props:any) {
 				height	={ ((ymax-ymin)/naturalHeight)*100 + "%"}
 				zIndex = { getZIndex() }
 				onMouseEnter = {() => setShowText(true)}
-				onMouseLeave = {() => setShowText(false)}
-
+				// onMouseLeave = {() => setShowText(false)}
 			>
 			</Box>
 		</div>
