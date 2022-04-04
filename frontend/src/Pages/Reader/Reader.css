@@ -23,7 +23,7 @@
 }
 
 .text-region{
-    background-color: rgba(255,0,0,0.2);
+    background-color: #ff000033;
     /* border-color: rgba(255,0,0,0.5); */
     /* border-width: 2px; */
     /* border-style: solid; */
@@ -32,9 +32,9 @@
     z-index: 10;
 }
 
-.text-region:hover{
+/* .text-region:hover{
     background-color: rgba(251, 255, 0, 0.473);
-}
+} */
 
 .text-reveal-region{
     color: rgba(0,0,0,0.700);
