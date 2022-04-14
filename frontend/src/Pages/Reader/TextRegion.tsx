@@ -6,13 +6,22 @@ type word = {
   token: string,
 }
 
+type regionProps = {
+	xyxy: number[],
+	naturalArea: number[],
+	tokens: word[],
+	setToken: any, // idk what the type of a const function is lol
+	setDefinition: any,
+	setSentence: any,
+	togglePopup: any,
+}
 
-export default function TextRegion(props:any) {
+export default function TextRegion(props:regionProps) {
 	
 	// Need to grab the parent containers height+width
 	// to properly position the boxes if the container is not
 	// the  original image size.
-	const unhoveredColor 	= '#ff000000'
+	const unhoveredColor 	= '#ffFF0040'
 	const hoveredColor   	= '#fbb97550'
 	const persistentColor = '#2ea6ff99'
 
@@ -38,7 +47,7 @@ export default function TextRegion(props:any) {
 		}
 	}
 
-	// Controls whether the assosciated text area gets displayed.
+	// Control logic for  whether the assosciated text area gets displayed.
 	const textController = () => {
 		// alert("HUH?")
 		console.log([showText,textPersistence])
@@ -62,10 +71,20 @@ export default function TextRegion(props:any) {
 
 	const renderEachToken = (words:word[]) => {
 		return words.map( (word:word) => {
-			return <span className='token'>{word.token}</span>
+			return <span className='token' 
+			onClick={ () => {
+				let sentence:string = '' // do this in one line?
+				tokens.forEach((w:word) => sentence += w.token)
+				console.log(words)
+				props.togglePopup()
+				props.setToken(word.token)
+				props.setSentence(sentence)
+				}}>
+				{word.token}
+			</span>
 		})
-
 	}
+
 	return (
 		<div>
 			{ showText 

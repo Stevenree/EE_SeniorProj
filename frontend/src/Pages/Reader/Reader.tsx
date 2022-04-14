@@ -8,6 +8,7 @@ import TopMenuButton from 'src/global-components/MenuButtons/TopMenuButton'
 import useKeyboardShortcut from './use-keyboard-shortcut'
 import upArrow from 'src/assets/upArrow.png'
 import TextRegion from './TextRegion'
+import WordPopup from './WordPopup'
 
 declare var window: any;
 
@@ -49,6 +50,17 @@ export default function Reader() {
   const [page_count, setCount] = React.useState(0);
   const [cur_page, setPage] = React.useState(0);
 
+  // Popup states that will be sent back up to the parent
+  const [showPopup, setShowPopup] = React.useState(false)
+  const [token, setToken] = React.useState('INIT TOKEN')
+  const [definitions, setDefinitions] = React.useState('DEFINITION GOES HERE')
+  const [sentence, setSentence] = React.useState('INIT SEN')
+  // const functions to wrap the set state functions so its usable as component params
+
+  const togglePopup = () => {
+    showPopup ? setShowPopup(false) : setShowPopup(true)
+  }
+
   useKeyboardShortcut(["ArrowLeft"],
     () => { if (cur_page > 0) setPage(cur_page - 1) }
   )
@@ -57,6 +69,7 @@ export default function Reader() {
     () => { if (cur_page < page_count - 1) setPage(cur_page + 1) }
   )
 
+  // initialize the IPC listener
   useEffect(() => {
     window.ipcRenderer.on(
       'post-manga-folder', (event: any, pages: page[]) => {
@@ -67,6 +80,8 @@ export default function Reader() {
       }
     )
   }, [])
+
+  const renderPopup = () => <WordPopup token={token} definitions={definitions} sentence={sentence} />
 
   const selectDirectory = () => {
     // alert(this.state.pages)
@@ -81,6 +96,10 @@ export default function Reader() {
           xyxy={[box.xmin, box.ymin, box.xmax, box.ymax]}
           naturalArea={[pages[cur_page].width, pages[cur_page].height]}
           tokens={box.text}
+          setToken={setToken}
+          setDefinition={setDefinitions}
+          setSentence={setSentence}
+          togglePopup={togglePopup}
         />
       )
     })
@@ -141,8 +160,9 @@ export default function Reader() {
     )
   }
 
+
   return (
-    <Box w="100%" h="100%" overflowY="hidden" bgColor="#fdfffc">
+    <Box w="100%" h="100%" overflowY="hidden" bgColor="#fdfffc" id='reader'>
       <Box h="32px" w={'100%'} bgColor="#343434">
         <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
 
@@ -165,6 +185,7 @@ export default function Reader() {
         </Flex>
 
       </Box>
+      { showPopup ? renderPopup() : <></>}
       {renderPage()}
       {renderPageCount()}
 
