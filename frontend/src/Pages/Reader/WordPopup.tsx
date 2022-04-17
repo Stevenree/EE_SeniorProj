@@ -1,6 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, IconButton } from '@chakra-ui/react'
 import React from 'react'
+import Draggable from 'react-draggable';
 
 
 type popupProps = {
@@ -19,19 +20,21 @@ export default function WordPopup(props:popupProps) {
     })
   }
   return (
-    <Box  className="popup"
-    backgroundColor={"#fafafa"} position={'absolute'} left={100} top={100}
-    >
-      <div>
-        <span className="popup-word">{props.token}</span>
-        <IconButton aria-label='Search database' icon={<AddIcon/>} isRound={true} colorScheme={'green'} size="xs" 
-        onClick={ipcSendNote}
-        />
-      </div>
-      <hr></hr>
-      <h2 className='popup-sentence'>{props.sentence}</h2>
-      <h2 className='popup-definition'>{props.definitions}</h2>
-      ...
-    </Box>
+    <Draggable>
+      <Box  className="popup"
+      backgroundColor={"#fafafa"} position={'absolute'} left={'50%'} top={'50%'}
+      >
+        <div>
+          <span className="popup-word">{props.token}</span>
+          <IconButton aria-label='Search database' icon={<AddIcon/>} isRound={true} colorScheme={'green'} size="xs" 
+          onClick={ipcSendNote}
+          />
+        </div>
+        <hr></hr>
+        <h2 className='popup-sentence'>{props.sentence}</h2>
+        <h2 className='popup-definition'>{props.definitions}</h2>
+        ...
+      </Box>
+    </Draggable>
   )
 }
