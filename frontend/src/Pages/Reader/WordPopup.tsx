@@ -8,16 +8,25 @@ type popupProps = {
   sentence: string,
   definitions: string, // probably a list tbh
 }
-
+declare var window: any;
 export default function WordPopup(props:popupProps) {
 
+  const ipcSendNote = () => {
+    window.ipcRenderer.send("addNote", {
+      "word":props.token, 
+      "definition":props.definitions,
+      "sentence":props.sentence,
+    })
+  }
   return (
     <Box  className="popup"
     backgroundColor={"#fafafa"} position={'absolute'} left={100} top={100}
     >
       <div>
         <span className="popup-word">{props.token}</span>
-        <IconButton aria-label='Search database' icon={<AddIcon />} isRound={true} colorScheme={'green'} size="xs" />
+        <IconButton aria-label='Search database' icon={<AddIcon/>} isRound={true} colorScheme={'green'} size="xs" 
+        onClick={ipcSendNote}
+        />
       </div>
       <hr></hr>
       <h2 className='popup-sentence'>{props.sentence}</h2>

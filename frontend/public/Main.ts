@@ -7,6 +7,67 @@ const dialog = require('electron').dialog;
 const sizeOf = require('image-size');
 const fetch = require('node-fetch');
 
+// Move these anki variables and methods to another file
+let DEFAULT_ANKI_DECK = "test1"
+let DEFAULT_ANKI_MODEL = "Manga-OCR-Sentence"
+let ANKI_CONNECT_ENDPOINT = "http://localhost:8765/"
+
+function evokeAnki(action, params){
+    try {
+        let post = {}
+        post["action"] = action
+        post["version"] = 6
+        post["params"] = params
+
+        fetch(ANKI_CONNECT_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(post)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function initializeAnkiDeck(){
+    evokeAnki("createDeck", {"deck":DEFAULT_ANKI_DECK})
+}
+
+function initializeAnkiModel(){
+    let cardModelParams = {
+        "modelName":DEFAULT_ANKI_MODEL, 
+        "inOrderFields":["Word","Definition","Sentence"],
+        "isCloze":false,
+        "cardTemplates":[{
+            "Name":DEFAULT_ANKI_MODEL, 
+            "Front": "<h1> {{Word}} </h1>", 
+            "Back": "<h1> {{Word}} </h1> {{Definition}} <hr> {{Sentence}}"
+        }]
+    }
+    evokeAnki('createModel', cardModelParams)
+}
+
+function addAnkiNote(word,definition,sentence){
+    let noteParams = {
+        "note":{
+            "deckName":DEFAULT_ANKI_DECK,
+            "modelName":DEFAULT_ANKI_MODEL,
+            "fields":{
+                "Word":word,
+                "Definition":definition,
+                "Sentence":sentence,
+            },
+            "options":{
+                "allowDuplicate":false,
+                "duplicateScope":"deck"
+            },
+            "tags":["Manga-OCR"]
+        }
+    }
+    evokeAnki("addNote", noteParams)
+}
 function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
@@ -103,6 +164,15 @@ function createWindow() {
             })
         })
     });
+
+    ipc.on('addNote', (event,arg) => {
+        console.log("IPC: addNote event")
+        console.log(arg["word"])
+        console.log(arg["definition"])
+        console.log(arg["sentence"])
+        // arg should be dict with word, definition, sentence fields
+        addAnkiNote(arg["word"], arg["definition"], arg["sentence"])
+    })
 }
 
 
@@ -110,7 +180,15 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow);
+app.whenReady().then( () => {
+    createWindow()
+    // create anki deck if not exist
+    initializeAnkiDeck()
+    initializeAnkiModel()
+    // create anki model if not exist
+
+    }
+);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
