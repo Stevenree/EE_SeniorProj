@@ -2,10 +2,6 @@ import { Box } from '@chakra-ui/react'
 import React from 'react'
 
 // seperate 
-type word = {
-  token: string,
-}
-
 type regionProps = {
 	xyxy: number[],
 	naturalArea: number[],
@@ -15,6 +11,13 @@ type regionProps = {
 	setSentence: any,
 	togglePopup: any,
 }
+
+type word = {
+  token: string,
+	lemma: string,
+  definitions: string[],
+}
+
 
 export default function TextRegion(props:regionProps) {
 	
@@ -50,7 +53,6 @@ export default function TextRegion(props:regionProps) {
 	// Control logic for  whether the assosciated text area gets displayed.
 	const textController = () => {
 		// alert("HUH?")
-		console.log([showText,textPersistence])
 		if ( !showText ) {
 			setShowText(true)
 			setRegionColor(hoveredColor)
@@ -78,6 +80,7 @@ export default function TextRegion(props:regionProps) {
 				console.log(words)
 				props.togglePopup()
 				props.setToken(word.token)
+				props.setDefinition(word.definitions)
 				props.setSentence(sentence)
 				}}>
 				{word.token}

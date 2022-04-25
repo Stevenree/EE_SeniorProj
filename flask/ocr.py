@@ -1,5 +1,4 @@
 from typing import List
-import spacy
 from jamdict import Jamdict
 import pytesseract
 from sudachipy import tokenizer
@@ -12,10 +11,10 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 class OCR():
   def __init__(self):
-    self.nlp = spacy.load("ja_core_news_sm")
     self.custom_fig = r'--oem 3 --psm 5' # Pytesseract presets for vertical text detection
     self.tokenizationMode = tokenizer.Tokenizer.SplitMode.C
     self.tokenizer_obj = dictionary.Dictionary().create()
+    self.jam = Jamdict()
   
   def recognizeRegion(self, original_img, xyxy, padding:int=0) -> dict:
     '''
@@ -38,6 +37,14 @@ class OCR():
     '''
     tokens  = [{"token":m.surface(), "lemma":m.dictionary_form()} for m in self.tokenizer_obj.tokenize(text, self.tokenizationMode)]
 
+    for i in range(len(tokens)):
+      tokens[i]["definitions"] = []
+      try:
+        result = self.jam.lookup(query=tokens[i]["lemma"])
+        for definition in result.entries[:3]:
+          tokens[i]['definitions'].append(definition.text())
+      except:
+        continue
     return tokens
 
 # if  __name__ == "__main__":

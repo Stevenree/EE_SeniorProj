@@ -29,6 +29,8 @@ type box = {
 
 type word = {
   token: string,
+  lemma: string,
+  definitions: string[],
 }
 
 
@@ -88,8 +90,9 @@ export default function Reader() {
     window.ipcRenderer.send('open-dir-dialog');
   }
 
+  
   const renderBoxes = () => {
-    return pages[cur_page].boxes.map( (box:box, i) => {
+    return pages[cur_page].boxes.map( (box:any, i) => {
       console.log(box);
       return(
         <TextRegion
