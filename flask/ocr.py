@@ -1,3 +1,5 @@
+import logging
+import traceback
 from typing import List
 from jamdict import Jamdict
 import pytesseract
@@ -35,16 +37,21 @@ class OCR():
     '''
     [{"token": "__", "dictForm": "__", "definitions": ["__",...}, ...]
     '''
+    jam = Jamdict()
     tokens  = [{"token":m.surface(), "lemma":m.dictionary_form()} for m in self.tokenizer_obj.tokenize(text, self.tokenizationMode)]
 
     for i in range(len(tokens)):
       tokens[i]["definitions"] = []
-      try:
-        result = self.jam.lookup(query=tokens[i]["lemma"])
-        for definition in result.entries[:3]:
-          tokens[i]['definitions'].append(definition.text())
-      except:
-        continue
+      
+      if tokens[i]["lemma"] != "":
+        try:
+          result = jam.lookup(query=tokens[i]["lemma"])
+          for definition in result.entries[:3]:
+              tokens[i]['definitions'].append(definition.text())
+        except Exception as e:
+          logging.error(traceback.format_exc())
+          continue
+
     return tokens
 
 # if  __name__ == "__main__":
