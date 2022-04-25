@@ -1,7 +1,10 @@
+import logging
+import traceback
 from typing import List
-import spacy
 from jamdict import Jamdict
 import pytesseract
+from sudachipy import tokenizer
+from sudachipy import dictionary
 
 # https://github.com/neocl/jamdict/blob/main/jamdict/util.py
 
@@ -10,8 +13,10 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 class OCR():
   def __init__(self):
-    self.nlp = spacy.load("ja_core_news_sm")
     self.custom_fig = r'--oem 3 --psm 5' # Pytesseract presets for vertical text detection
+    self.tokenizationMode = tokenizer.Tokenizer.SplitMode.C
+    self.tokenizer_obj = dictionary.Dictionary().create()
+    self.jam = Jamdict()
   
   def recognizeRegion(self, original_img, xyxy, padding:int=0) -> dict:
     '''
@@ -29,11 +34,25 @@ class OCR():
     return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':down, 'text':tokens}
 
   def tokenize(self, text:str) -> List:
-    word_collection = []
-    doc = self.nlp(text)
-    for token in doc:
-      word_collection.append({"token":token.text})
-    return word_collection
+    '''
+    [{"token": "__", "dictForm": "__", "definitions": ["__",...}, ...]
+    '''
+    jam = Jamdict()
+    tokens  = [{"token":m.surface(), "lemma":m.dictionary_form()} for m in self.tokenizer_obj.tokenize(text, self.tokenizationMode)]
+
+    for i in range(len(tokens)):
+      tokens[i]["definitions"] = []
+      
+      if tokens[i]["lemma"] != "":
+        try:
+          result = jam.lookup(query=tokens[i]["lemma"])
+          for definition in result.entries[:3]:
+              tokens[i]['definitions'].append(definition.text())
+        except Exception as e:
+          logging.error(traceback.format_exc())
+          continue
+
+    return tokens
 
 # if  __name__ == "__main__":
 #   print("Finished imports")

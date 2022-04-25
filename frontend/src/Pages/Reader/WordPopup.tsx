@@ -7,7 +7,7 @@ import Draggable from 'react-draggable';
 type popupProps = {
   token: string,
   sentence: string,
-  definitions: string, // probably a list tbh
+  definitions: string[], // probably a list tbh
 }
 declare var window: any;
 export default function WordPopup(props:popupProps) {
@@ -15,7 +15,7 @@ export default function WordPopup(props:popupProps) {
   const ipcSendNote = () => {
     window.ipcRenderer.send("addNote", {
       "word":props.token, 
-      "definition":props.definitions,
+      "definitions":props.definitions.join("\n"),
       "sentence":props.sentence,
     })
   }
@@ -33,7 +33,6 @@ export default function WordPopup(props:popupProps) {
         <hr></hr>
         <h2 className='popup-sentence'>{props.sentence}</h2>
         <h2 className='popup-definition'>{props.definitions}</h2>
-        ...
       </Box>
     </Draggable>
   )

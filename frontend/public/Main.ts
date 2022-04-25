@@ -168,10 +168,12 @@ function createWindow() {
     ipc.on('addNote', (event,arg) => {
         console.log("IPC: addNote event")
         console.log(arg["word"])
-        console.log(arg["definition"])
+        console.log(arg["definitions"])
         console.log(arg["sentence"])
         // arg should be dict with word, definition, sentence fields
-        addAnkiNote(arg["word"], arg["definition"], arg["sentence"])
+        initializeAnkiDeck()
+        initializeAnkiModel()
+        addAnkiNote(arg["word"], arg["definitions"], arg["sentence"])
     })
 }
 
