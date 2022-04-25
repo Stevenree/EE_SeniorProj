@@ -55,7 +55,7 @@ export default function Reader() {
   // Popup states that will be sent back up to the parent
   const [showPopup, setShowPopup] = React.useState(false)
   const [token, setToken] = React.useState('INIT TOKEN')
-  const [definitions, setDefinitions] = React.useState('DEFINITION GOES HERE')
+  const [definitions, setDefinitions] = React.useState(['DEFINITION GOES HERE'])
   const [sentence, setSentence] = React.useState('INIT SEN')
   // const functions to wrap the set state functions so its usable as component params
 

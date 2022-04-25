@@ -171,6 +171,8 @@ function createWindow() {
         console.log(arg["definitions"])
         console.log(arg["sentence"])
         // arg should be dict with word, definition, sentence fields
+        initializeAnkiDeck()
+        initializeAnkiModel()
         addAnkiNote(arg["word"], arg["definitions"], arg["sentence"])
     })
 }
