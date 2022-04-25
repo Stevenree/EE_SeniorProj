@@ -34,16 +34,16 @@ SET FLASK_DEV=development
 flask run
 ```
 
-## Features completed
+ ## Features completed
 - Reading Manga
 - Text box detection Model (CPU, runs on host PC)
 - Rudimentary OCR
-
-## Features to be added
-- Put all types in a single file and import as needed
-- Improved OCR detection (Remove furigana & noise)
 - Dictionary lookup
-- (Base Final Goal) Anki Integration
+- Anki Sentence + Definition Integration
+
+  ## Features to be added
+- Improved OCR detection (Remove furigana & noise)
+- Allow for exporting manga panel context to anki cards
 
 ## Course info
 [The Cooper Union for the Advancement of Science and Art](https://cooper.edu/engineering/courses/electrical-and-computer-engineering-undergraduate/ece-395)
