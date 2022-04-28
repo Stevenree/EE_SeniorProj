@@ -119,48 +119,60 @@ function createWindow() {
         ).then( async (dir) => {
             if (dir === undefined) return;
             let dirPath = dir.filePaths[0];
+        
             let pages = [];
-
-            const files = fs.readdirSync(dirPath)
-            // counter so that at last .foreach iter we ipc send
+            const files = fs.readdirSync(dirPath, {withFileTypes:true} )
             let filesProcessed = 0; 
 
-            // Move to other function, figure out how to make it not block UI thread
-            files.forEach( (file) => {
-                let absFilePath = path.join(dirPath, file);
-                let fileBase64 = fs.readFileSync(absFilePath, 'base64')
-                const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
-                const page = {}
-                page["base64"] = fileBase64
-                page["width"] = dimensions.width
-                page["height"] = dimensions.height
-                
-                // put the pages through the model here
-                const data = fileBase64;
-                const headers = {
-                    'content-type': 'image/jpg',
-                    'body':data,
-                    'method': 'post',
+            function sendImagesIfDone(){
+                if ( filesProcessed === files.length){
+                    console.log("EVENT SENDER | post-manga-folder");
+                    event.sender.send('post-manga-folder', pages);
+                } else {
+                    console.log("EVENT SENDER | error-empty-folder");
+                    event.sender.send('error-empty-folder')
                 }
-                const url = "http://localhost:5000/infer"
-                fetch(url, headers).then( (res) =>{
-                    res.json()
-                    .then( (boxes) => {
-                        console.log(boxes)
-                        page['boxes'] = boxes
-                        pages.push(page);
+            }
+
+            // Move to seperate thread to stop blocking UI
+            files.forEach( (file) => {
+                try{
+                    console.log(file)
+                    if (file.isDirectory()){
+                        console.log("FOUND A DIRECTORY")
                         filesProcessed++;
+                        return;
+                    }
+                    let absFilePath = path.join(dirPath, file.name);
+                    let fileBase64 = fs.readFileSync(absFilePath, 'base64')
+                    const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
+                    const page = {}
+                    page["base64"] = fileBase64
+                    page["width"] = dimensions.width
+                    page["height"] = dimensions.height
+                    
+                    // put the pages through the model here
+                    const data = fileBase64;
+                    const headers = {
+                        'content-type': 'image/jpg',
+                        'body':data,
+                        'method': 'post',
+                    }
+                    // check annotations folder if page already exists
+                    const url = "http://localhost:5000/infer"
+                    fetch(url, headers).then( (res) =>{
+                        res.json().then( (boxes) => {
+                            // console.log(boxes)
+                            page['boxes'] = boxes
+                            pages.push(page);
+                            // Save to ./annotations
+                            filesProcessed++;
+                        })
+                        .then( () => sendImagesIfDone() )
                     })
-                    .then( () => {
-                        if ( filesProcessed === files.length){
-                            console.log("EVENT SENDER | post-manga-folder");
-                            event.sender.send('post-manga-folder', pages);
-                        } else {
-                            console.log("EVENT SENDER | error-empty-folder");
-                            event.sender.send('error-empty-folder')
-                        }
-                    })
-                })
+                } catch (error) {
+                    console.error(error)
+                }
             })
         })
     });

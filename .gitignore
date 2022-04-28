@@ -2,3 +2,4 @@ node_modules/
 *.pt
 flask/venv/Lib/site-packages/torch/*
 flask/venv/Lib/site-packages/*
+*.db
