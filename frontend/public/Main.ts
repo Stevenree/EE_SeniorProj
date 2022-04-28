@@ -119,48 +119,97 @@ function createWindow() {
         ).then( async (dir) => {
             if (dir === undefined) return;
             let dirPath = dir.filePaths[0];
+        
             let pages = [];
-
-            const files = fs.readdirSync(dirPath)
-            // counter so that at last .foreach iter we ipc send
+            const files = fs.readdirSync(dirPath, {withFileTypes:true} )
             let filesProcessed = 0; 
 
-            // Move to other function, figure out how to make it not block UI thread
-            files.forEach( (file) => {
-                let absFilePath = path.join(dirPath, file);
-                let fileBase64 = fs.readFileSync(absFilePath, 'base64')
-                const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
-                const page = {}
-                page["base64"] = fileBase64
-                page["width"] = dimensions.width
-                page["height"] = dimensions.height
-                
-                // put the pages through the model here
-                const data = fileBase64;
-                const headers = {
-                    'content-type': 'image/jpg',
-                    'body':data,
-                    'method': 'post',
+            function sendImagesIfDone(){
+                if ( filesProcessed === files.length){
+                    console.log("EVENT SENDER | post-manga-folder");
+                    event.sender.send('post-manga-folder', pages);
+                } else {
+                    console.log("EVENT SENDER | error-empty-folder");
+                    event.sender.send('error-empty-folder')
                 }
-                const url = "http://localhost:5000/infer"
-                fetch(url, headers).then( (res) =>{
-                    res.json()
-                    .then( (boxes) => {
-                        console.log(boxes)
-                        page['boxes'] = boxes
-                        pages.push(page);
-                        filesProcessed++;
-                    })
-                    .then( () => {
-                        if ( filesProcessed === files.length){
-                            console.log("EVENT SENDER | post-manga-folder");
-                            event.sender.send('post-manga-folder', pages);
-                        } else {
-                            console.log("EVENT SENDER | error-empty-folder");
-                            event.sender.send('error-empty-folder')
-                        }
-                    })
+            }
+
+            function saveJSON(json, annoPath, page){
+                let data = JSON.stringify(json)
+                let writePath = path.join(annoPath, page)
+                fs.writeFileSync(writePath, data)
+            }
+
+            // Create a object to  store all the JSON annotations available
+            function readSavedAnnotations(annoPath){
+                let savedAnnotations = {}
+                let annos = fs.readdirSync(annoPath)
+                annos.forEach( (file) => {
+                    let filePath = path.join(annoPath, file)
+                    let boxes = fs.readFileSync(filePath);
+                    let data = JSON.parse(boxes)
+                    savedAnnotations[file] = data
                 })
+                return savedAnnotations
+            }
+
+            // Ensure that an annotation folder exists before reading files
+            let annoPath = path.join(dirPath, "/annotations/")
+            if ( !fs.existsSync(annoPath) ){
+                fs.mkdirSync(annoPath) 
+            }
+            // Linear search to store annotations in an Object
+            let savedAnnotations = readSavedAnnotations(annoPath)
+
+            // Make everything async here to stop blocking UI
+            files.forEach( (file) => {
+                console.log(file)
+                try{
+                    if ( file.isDirectory() ){
+                        filesProcessed++;
+                        sendImagesIfDone()
+                        return;
+                    }
+                    let absFilePath = path.join(dirPath, file.name);
+                    let fileBase64 = fs.readFileSync(absFilePath, 'base64')
+                    const dimensions = sizeOf( Buffer.from(fileBase64, 'base64') );
+                    const page = {}
+                    page["base64"] = fileBase64
+                    page["width"] = dimensions.width
+                    page["height"] = dimensions.height
+                    
+                    // put the pages through the model here
+                    const data = fileBase64;
+                    const headers = {
+                        'content-type': 'image/jpg',
+                        'body':data,
+                        'method': 'post',
+                    }
+
+                    // check annotations folder if page already exists
+                    if ( file.name in savedAnnotations){
+                        page['boxes'] = savedAnnotations[file.name]
+                        pages.push(page)
+                        filesProcessed++
+                    } 
+                    else {
+                        const url = "http://localhost:5000/infer"
+                        fetch(url, headers).then( (res) =>{
+                            res.json().then( (boxes) => {
+                                // console.log(boxes)
+                                page['boxes'] = boxes
+                                pages.push(page);
+                                filesProcessed++;
+                                saveJSON(boxes, annoPath, file.name)
+                            })
+                            .then( () => sendImagesIfDone() )
+                        })
+                    }
+                } 
+                catch (error) { 
+                    console.error(error) 
+                }
+                sendImagesIfDone()
             })
         })
     });

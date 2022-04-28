@@ -12,7 +12,7 @@ import torch
 import time
 import base64
 import pytesseract
-from OCR import OCR
+from ocr import OCR
 
 model = torch.jit.load("models/ts-model_final-cpu.pt")
 model.eval()
