@@ -134,6 +134,23 @@ function createWindow() {
                 }
             }
 
+            function saveJSON(json, annoPath, page){
+                let data = JSON.stringify(json)
+                let writePath = path.join(annoPath, page)
+                fs.writeFileSync(writePath, data)
+            }
+
+            function readSavedAnnotations(){
+                let savedAnnotations = {}
+                return savedAnnotations
+            }
+
+            // Ensure that an annotation folder exists before reading files
+            let annoPath = path.join(dirPath, "/annotations/")
+            if ( !fs.existsSync(annoPath) ){
+                fs.mkdirSync(annoPath) 
+            }
+
             // Move to seperate thread to stop blocking UI
             files.forEach( (file) => {
                 try{
@@ -165,8 +182,8 @@ function createWindow() {
                             // console.log(boxes)
                             page['boxes'] = boxes
                             pages.push(page);
-                            // Save to ./annotations
                             filesProcessed++;
+                            saveJSON(boxes, annoPath, file.name)
                         })
                         .then( () => sendImagesIfDone() )
                     })
