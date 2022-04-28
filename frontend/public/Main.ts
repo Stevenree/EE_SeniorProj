@@ -140,8 +140,16 @@ function createWindow() {
                 fs.writeFileSync(writePath, data)
             }
 
-            function readSavedAnnotations(){
+            // Create a object to  store all the JSON annotations available
+            function readSavedAnnotations(annoPath){
                 let savedAnnotations = {}
+                let annos = fs.readdirSync(annoPath)
+                annos.forEach( (file) => {
+                    let filePath = path.join(annoPath, file)
+                    let boxes = fs.readFileSync(filePath);
+                    let data = JSON.parse(boxes)
+                    savedAnnotations[file] = data
+                })
                 return savedAnnotations
             }
 
@@ -150,14 +158,16 @@ function createWindow() {
             if ( !fs.existsSync(annoPath) ){
                 fs.mkdirSync(annoPath) 
             }
+            // Linear search to store annotations in an Object
+            let savedAnnotations = readSavedAnnotations(annoPath)
 
-            // Move to seperate thread to stop blocking UI
+            // Make everything async here to stop blocking UI
             files.forEach( (file) => {
+                console.log(file)
                 try{
-                    console.log(file)
-                    if (file.isDirectory()){
-                        console.log("FOUND A DIRECTORY")
+                    if ( file.isDirectory() ){
                         filesProcessed++;
+                        sendImagesIfDone()
                         return;
                     }
                     let absFilePath = path.join(dirPath, file.name);
@@ -175,21 +185,31 @@ function createWindow() {
                         'body':data,
                         'method': 'post',
                     }
+
                     // check annotations folder if page already exists
-                    const url = "http://localhost:5000/infer"
-                    fetch(url, headers).then( (res) =>{
-                        res.json().then( (boxes) => {
-                            // console.log(boxes)
-                            page['boxes'] = boxes
-                            pages.push(page);
-                            filesProcessed++;
-                            saveJSON(boxes, annoPath, file.name)
+                    if ( file.name in savedAnnotations){
+                        page['boxes'] = savedAnnotations[file.name]
+                        pages.push(page)
+                        filesProcessed++
+                    } 
+                    else {
+                        const url = "http://localhost:5000/infer"
+                        fetch(url, headers).then( (res) =>{
+                            res.json().then( (boxes) => {
+                                // console.log(boxes)
+                                page['boxes'] = boxes
+                                pages.push(page);
+                                filesProcessed++;
+                                saveJSON(boxes, annoPath, file.name)
+                            })
+                            .then( () => sendImagesIfDone() )
                         })
-                        .then( () => sendImagesIfDone() )
-                    })
-                } catch (error) {
-                    console.error(error)
+                    }
+                } 
+                catch (error) { 
+                    console.error(error) 
                 }
+                sendImagesIfDone()
             })
         })
     });
