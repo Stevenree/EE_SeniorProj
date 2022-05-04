@@ -3,22 +3,33 @@ import { Box, Button, IconButton } from '@chakra-ui/react'
 import React from 'react'
 import Draggable from 'react-draggable';
 
+type panelRegion = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
+}
+
 
 type popupProps = {
   token: string,
   sentence: string,
   definitions: string[], // probably a list tbh
+  panelRegion: panelRegion
 }
+
 declare var window: any;
 export default function WordPopup(props:popupProps) {
 
   const ipcSendNote = () => {
+    console.log(props.panelRegion)
     window.ipcRenderer.send("addNote", {
       "word":props.token, 
       "definitions":props.definitions.join("\n"),
       "sentence":props.sentence,
     })
   }
+
   return (
     <Draggable>
       <Box  className="popup"

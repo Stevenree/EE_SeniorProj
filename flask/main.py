@@ -52,9 +52,8 @@ def inferBoxes(model:any, transformer:any, img_data:any) -> List[List[int]]:
               top-leniency < json_arr[i]['ymin'] and 
               bottom+leniency > json_arr[i]['ymax']
         ):
-          json_arr[i]['panel'] = {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':bottom}
+          json_arr[i]['panelRegion'] = {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':bottom}
           
-
   t2 = time.time()
   print(t2-t1)
   print(json_arr)

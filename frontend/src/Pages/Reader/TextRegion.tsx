@@ -2,14 +2,24 @@ import { Box } from '@chakra-ui/react'
 import React from 'react'
 
 // seperate 
+
+type panelRegion = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
+}
+
 type regionProps = {
 	xyxy: number[],
 	naturalArea: number[],
 	tokens: word[],
+	panelRegion: panelRegion,
 	setToken: any, // idk what the type of a const function is lol
 	setDefinition: any,
 	setSentence: any,
 	togglePopup: any,
+	setPanelRegion: any,
 }
 
 type word = {
@@ -17,7 +27,6 @@ type word = {
 	lemma: string,
   definitions: string[],
 }
-
 
 export default function TextRegion(props:regionProps) {
 	
@@ -39,7 +48,8 @@ export default function TextRegion(props:regionProps) {
 
 	const naturalWidth = props.naturalArea[0]
 	const naturalHeight = props.naturalArea[1]
-	
+	const panelRegion = props.panelRegion
+
 	const togglePersistence = () => {
 		if (textPersistence) {
 			setTextPersistence(false) 
@@ -82,6 +92,8 @@ export default function TextRegion(props:regionProps) {
 				props.setToken(word.token)
 				props.setDefinition(word.definitions)
 				props.setSentence(sentence)
+				props.setPanelRegion(props.panelRegion)
+				console.log(props.panelRegion)
 				}}>
 				{word.token}
 			</span>

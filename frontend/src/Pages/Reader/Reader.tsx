@@ -19,12 +19,20 @@ type page = {
   boxes: box[],
 }
 
+type panelRegion = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
+}
+
 type box = {
   xmin: number,
   ymin: number,
   xmax: number,
   ymax: number,
   text: word[],
+  panel: panelRegion,
 }
 
 type word = {
@@ -32,7 +40,6 @@ type word = {
   lemma: string,
   definitions: string[],
 }
-
 
 export default function Reader() {
   const [pages, setPages] = React.useState([{ 
@@ -57,8 +64,9 @@ export default function Reader() {
   const [token, setToken] = React.useState('INIT TOKEN')
   const [definitions, setDefinitions] = React.useState(['DEFINITION GOES HERE'])
   const [sentence, setSentence] = React.useState('INIT SEN')
-  // const functions to wrap the set state functions so its usable as component params
+  const [panelRegion, setPanelRegion] = React.useState({'xmin':0,'ymin':0,'xmax':0,'ymax':0})
 
+  // const functions to wrap the set state functions so its usable as component params
   const togglePopup = () => {
     showPopup ? setShowPopup(false) : setShowPopup(true)
   }
@@ -83,14 +91,13 @@ export default function Reader() {
     )
   }, [])
 
-  const renderPopup = () => <WordPopup token={token} definitions={definitions} sentence={sentence} />
+  const renderPopup = () => <WordPopup token={token} definitions={definitions} sentence={sentence} panelRegion={panelRegion} />
 
   const selectDirectory = () => {
     // alert(this.state.pages)
     window.ipcRenderer.send('open-dir-dialog');
   }
 
-  
   const renderBoxes = () => {
     return pages[cur_page].boxes.map( (box:any, i) => {
       console.log(box);
@@ -98,11 +105,13 @@ export default function Reader() {
         <TextRegion
           xyxy={[box.xmin, box.ymin, box.xmax, box.ymax]}
           naturalArea={[pages[cur_page].width, pages[cur_page].height]}
+          panelRegion={box.panelRegion}
           tokens={box.text}
           setToken={setToken}
           setDefinition={setDefinitions}
           setSentence={setSentence}
           togglePopup={togglePopup}
+          setPanelRegion={setPanelRegion}
         />
       )
     })
