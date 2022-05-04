@@ -23,15 +23,18 @@ class OCR():
     Takes in a RGB array for an image and the region of interest (with padding) to perform vertical Japanese OCR.
     Returns a JSON for the region with the xyxy region and text
     '''
-    p = padding
-    left, top, right, down = int(xyxy[0]-p), int(xyxy[1]-p), int(xyxy[2]+p), int(xyxy[3]+p)
-    img_roi = original_img[top:down, left:right]
+    try:
+      p = padding
+      left, top, right, bottom = int(xyxy[0]-p), int(xyxy[1]-p), int(xyxy[2]+p), int(xyxy[3]+p)
+      img_roi = original_img[top:bottom, left:right]
 
-    text = pytesseract.image_to_string(img_roi, 'jpn_vert', config=self.custom_fig) # str
-    text = text.replace("\n", "")
-    text = text.replace(" ", "")
-    tokens = self.tokenize(text)
-    return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':down, 'text':tokens}
+      text = pytesseract.image_to_string(img_roi, 'jpn_vert', config=self.custom_fig) # str
+      text = text.replace("\n", "")
+      text = text.replace(" ", "")
+      tokens = self.tokenize(text)
+      return {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':bottom, 'text':tokens}
+    except Exception as e:
+      print(e)
 
   def tokenize(self, text:str) -> List:
     '''

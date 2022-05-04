@@ -14,7 +14,7 @@ import base64
 import pytesseract
 from ocr import OCR
 
-model = torch.jit.load("models/ts-model_final-cpu.pt")
+model = torch.jit.load("models/ts-panel-model_final-cpu.pt")
 model.eval()
 ratioTransformer = ImageRatioTransform( shortest_length=800, max_length=1333)
 ocr = OCR()
@@ -29,14 +29,31 @@ def inferBoxes(model:any, transformer:any, img_data:any) -> List[List[int]]:
   formatted_inputs = transformer.getTransform(img_data).apply_transform( tensor_format=True, device="cpu" )
   scale = formatted_inputs[1][0][2]
   pred = model(formatted_inputs)
+  print(pred)
   regions = pred[0] * scale
   regions = regions.cpu().data.numpy()
+  labels = pred[2].cpu().data.numpy()
 
   json_arr = []
+  panels = []
 
-  for i in regions:
-    json_arr.append( ocr.recognizeRegion(img_data, i, padding=4) )
-
+  # 0:text , 1:panel
+  for region, label in zip(regions,labels):
+    if label == 0: 
+      json_arr.append( ocr.recognizeRegion(img_data, region, padding=4) )
+    
+    if label == 1:
+      # Go through each text entry in json_array to figure out if it is nested within this panel
+      left, top, right, bottom = [int(region[i]) for i in (0,1,2,3)]
+      leniency = 20
+      for i in range(len(json_arr)):
+        if (  left-leniency < json_arr[i]['xmin'] and 
+              right+leniency > json_arr[i]['xmax'] and 
+              top-leniency < json_arr[i]['ymin'] and 
+              bottom+leniency > json_arr[i]['ymax']
+        ):
+          json_arr[i]['panel'] = {'xmin':left, 'ymin':top, 'xmax':right, 'ymax':bottom}
+          
 
   t2 = time.time()
   print(t2-t1)
