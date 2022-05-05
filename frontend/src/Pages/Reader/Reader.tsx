@@ -91,7 +91,13 @@ export default function Reader() {
     )
   }, [])
 
-  const renderPopup = () => <WordPopup token={token} definitions={definitions} sentence={sentence} panelRegion={panelRegion} />
+  const renderPopup = () => <WordPopup 
+    token={token} 
+    definitions={definitions} 
+    sentence={sentence} 
+    panelRegion={panelRegion} 
+    base64Image={pages[cur_page].base64} 
+  />
 
   const selectDirectory = () => {
     // alert(this.state.pages)

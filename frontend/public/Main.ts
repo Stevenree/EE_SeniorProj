@@ -6,6 +6,7 @@ const ipc = ipcMain;
 const dialog = require('electron').dialog;
 const sizeOf = require('image-size');
 const fetch = require('node-fetch');
+const sharp = require('sharp')
 
 // Move these anki variables and methods to another file
 let DEFAULT_ANKI_DECK = "test1"
@@ -38,36 +39,69 @@ function initializeAnkiDeck(){
 function initializeAnkiModel(){
     let cardModelParams = {
         "modelName":DEFAULT_ANKI_MODEL, 
-        "inOrderFields":["Word","Definition","Sentence"],
+        "inOrderFields":["Word","Definition","Sentence","Panel"],
         "isCloze":false,
         "cardTemplates":[{
             "Name":DEFAULT_ANKI_MODEL, 
             "Front": "<h1> {{Word}} </h1>", 
-            "Back": "<h1> {{Word}} </h1> {{Definition}} <hr> {{Sentence}}"
+            "Back": "<h1> {{Word}} </h1> {{Definition}} <hr> {{Panel}} <hr> {{Sentence}}"
         }]
     }
     evokeAnki('createModel', cardModelParams)
 }
 
-function addAnkiNote(word,definition,sentence){
-    let noteParams = {
-        "note":{
-            "deckName":DEFAULT_ANKI_DECK,
-            "modelName":DEFAULT_ANKI_MODEL,
-            "fields":{
-                "Word":word,
-                "Definition":definition,
-                "Sentence":sentence,
-            },
-            "options":{
-                "allowDuplicate":false,
-                "duplicateScope":"deck"
-            },
-            "tags":["Manga-OCR"]
-        }
+
+function cropBase64(base64, region){
+    // Returns a promise to return the image data as a buffer
+    try {
+        let buffer = Buffer.from(base64, 'base64')
+        let sharpBuffer = sharp(buffer)
+        let cropped = sharpBuffer.extract({
+            width:region['xmax']-region['xmin'], 
+            height:region['ymax']-region['ymin'],
+            left:region['xmin'],
+            top:region['ymin']
+        })
+        // console.log(cropped)
+        return cropped.toBuffer()
+    } catch (error) {
+        console.log(error)
     }
-    evokeAnki("addNote", noteParams)
 }
+
+function addAnkiNote(word, definition, sentence, panelRegion, base64Image){
+    cropBase64(base64Image, panelRegion).then( (imgBuffer) => {
+        let imgData = imgBuffer.toString('base64')
+        let noteParams = {
+            "note":{
+                "deckName":DEFAULT_ANKI_DECK,
+                "modelName":DEFAULT_ANKI_MODEL,
+                "fields":{
+                    "Word":word,
+                    "Definition":definition,
+                    "Sentence":sentence,
+                },
+                "options":{
+                    "allowDuplicate":false,
+                    "duplicateScope":"deck"
+                },
+                "tags":["Manga-OCR"],
+                "picture":[{
+                    "data":imgData,
+                    "filename":"MangaOCR_"+sentence+".jpg",
+                    "fields":[
+                        "Panel"
+                    ]
+                }]
+            }
+        }
+        evokeAnki("addNote", noteParams)
+    })
+    // storeMediaFile for explanation on "picture" field options
+
+
+}
+
 function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
@@ -222,7 +256,7 @@ function createWindow() {
         // arg should be dict with word, definition, sentence fields
         initializeAnkiDeck()
         initializeAnkiModel()
-        addAnkiNote(arg["word"], arg["definitions"], arg["sentence"])
+        addAnkiNote(arg["word"], arg["definitions"], arg["sentence"], arg['panelRegion'], arg['base64Image'])
     })
 }
 
@@ -233,11 +267,8 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then( () => {
     createWindow()
-    // create anki deck if not exist
     initializeAnkiDeck()
     initializeAnkiModel()
-    // create anki model if not exist
-
     }
 );
 

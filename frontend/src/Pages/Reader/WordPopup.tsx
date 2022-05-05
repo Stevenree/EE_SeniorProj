@@ -15,18 +15,20 @@ type popupProps = {
   token: string,
   sentence: string,
   definitions: string[], // probably a list tbh
-  panelRegion: panelRegion
+  panelRegion: panelRegion,
+  base64Image: string,
 }
 
 declare var window: any;
 export default function WordPopup(props:popupProps) {
 
   const ipcSendNote = () => {
-    console.log(props.panelRegion)
     window.ipcRenderer.send("addNote", {
       "word":props.token, 
       "definitions":props.definitions.join("\n"),
       "sentence":props.sentence,
+      "panelRegion":props.panelRegion,
+      "base64Image":props.base64Image,
     })
   }
 
