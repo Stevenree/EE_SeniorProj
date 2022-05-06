@@ -31,6 +31,7 @@
     /* border-radius: 3px; */
     user-drag: none;
     z-index: 10;
+    cursor: pointer;
 }
 
 /* .text-region:hover{
@@ -50,6 +51,7 @@
     z-index: 100;
     font-size: 1.25vw;
     font-family: Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+    cursor:pointer;
 }
 
 .token:hover{
