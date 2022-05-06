@@ -40,10 +40,10 @@ flask run
 - Rudimentary OCR
 - Dictionary lookup
 - Anki Sentence + Definition Integration
+- Allow for exporting manga panel context to anki cards
 
   ## Features to be added
 - Improved OCR detection (Remove furigana & noise)
-- Allow for exporting manga panel context to anki cards
 
 ## Course info
 [The Cooper Union for the Advancement of Science and Art](https://cooper.edu/engineering/courses/electrical-and-computer-engineering-undergraduate/ece-395)
