@@ -23,6 +23,7 @@ function App() {
         <ChakraProvider>
             <Flex flexFlow="column" height={'100%'}>    
                 <TitleBar />
+                <Box height={35}></Box>
                     
                 {/* Container body for the rest of the application */}
                 <Box bgColor={"green.50"} flexGrow={1} flexShrink={1} flexBasis={'auto'}>   

@@ -191,28 +191,6 @@ export default function Reader() {
 
   return (
     <Box w="100%" h="100%" overflowY="hidden" bgColor="#fdfffc" id='reader'>
-      <Box h="32px" w={'100%'} bgColor="#343434">
-        <Flex w={"100%"} h={"32px"} flexGrow={0} color="whiteAlpha.900">
-
-          <TopMenuButton menuName="File">
-            <ChildMenuButton name="Open Folder" onClick={selectDirectory} />
-            <ChildMenuButton name="Open Recent" onClick={selectDirectory} />
-            <ChildMenuButton name="Save Project" onClick={() => { }} />
-            <ChildMenuButton name="Exit project" onClick={() => { }} />
-          </TopMenuButton>
-
-          <TopMenuButton menuName="Edit">
-          </TopMenuButton>
-
-          <TopMenuButton menuName="View">
-            <ChildMenuButton name="Fullscreen" onClick={() => { }} />
-          </TopMenuButton>
-
-          <TopMenuButton menuName="About" onClick={() => { }}>
-          </TopMenuButton>
-        </Flex>
-
-      </Box>
       { showPopup ? renderPopup() : <></>}
       {renderPage()}
       {renderPageCount()}

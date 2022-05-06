@@ -1,8 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
 
-// seperate 
-
 type panelRegion = {
   xmin: number,
   ymin: number,
@@ -75,7 +73,9 @@ export default function TextRegion(props:regionProps) {
 	}
 	const setText = () => {
 		setShowText(true)
-		setRegionColor(hoveredColor)
+		if (!textPersistence){
+			setRegionColor(hoveredColor)
+		}
 	}
 	const removeText = () => {
 		if (!textPersistence){
@@ -128,7 +128,7 @@ export default function TextRegion(props:regionProps) {
 				left	={ (xmin/naturalWidth)*100 + "%" } 
 				width	={ ((xmax-xmin)/naturalWidth)*100 + "%" }
 				top 	={ (ymin/naturalHeight)*100 + "%"}
-				height	={ ((ymax-ymin)/naturalHeight)*100 + "%"}
+				height	={ ((ymax	-ymin)/naturalHeight)*100 + "%"}
 				backgroundColor = {regionColor}
 				onMouseEnter = {() => setText()}
 				onMouseLeave = {() => removeText()}
@@ -136,7 +136,6 @@ export default function TextRegion(props:regionProps) {
 				zIndex = { getZIndex() }
 			>
 			</Box>
-		</div>
-		
+		</div>	
 	)
 }

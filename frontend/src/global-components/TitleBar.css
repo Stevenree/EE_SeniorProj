@@ -20,3 +20,8 @@
 .close-button:hover{
     background-color: #D32626 !important;
 }
+
+.title-bar-container{
+    z-index: 10000;
+}
+

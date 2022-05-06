@@ -46,16 +46,18 @@ export default class SideBar extends Component {
 
 		const drawer_handle = (
 			<>
-			{ this.state.isOpen===true ? 
-				<IconButton 
+			{ this.state.isOpen===true 
+				? <IconButton 
 					aria-label="close-button" 
 					borderRadius={'100vh'} bgColor={"#2B2B2B"} boxShadow="none !important"
 					w="64px" h="64px" marginTop="10px"
 					icon={<ArrowBackIcon boxSize="36px" color="whiteAlpha.900"/>}
 					_hover={{'background':'#545454'}}
 					onClick={ () => {this.setState({isOpen:false})} }
-				></IconButton> :
-				<IconButton 
+				>
+				</IconButton> 
+				
+				: <IconButton 
 					aria-label="close-button" 
 					borderRadius={'100vh'} bgColor={"#2B2B2B"} boxShadow="none !important"
 					w="64px" h="64px" marginTop="10px" 
@@ -73,16 +75,15 @@ export default class SideBar extends Component {
 				<Box position="absolute" w={'120px'} top={"60px"} left={0}>
 					<Center>{drawer_handle}</Center>
 				</Box>
-				{ this.state.isOpen===true ? 
-					<Box h={'100%'} w={'120px'} bgColor={'#2B2B2B'} overflow={'hidden'}>
-						<VStack>
-							<Box h="96px" />
-							{route_buttons}
-						</VStack>
-					</Box> : 
-					<> </>
+				{ this.state.isOpen===true 
+					? <Box h={'100%'} w={'120px'} bgColor={'#2B2B2B'} overflow={'hidden'}>
+							<VStack>
+								<Box h="128px" />
+								{route_buttons}
+							</VStack>
+						</Box> 
+					: <> </>
 				}
-				
 			</Box>
 		)
 	}
