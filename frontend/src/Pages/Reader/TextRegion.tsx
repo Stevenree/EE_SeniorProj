@@ -73,6 +73,16 @@ export default function TextRegion(props:regionProps) {
 		}
 		else return
 	}
+	const setText = () => {
+		setShowText(true)
+		setRegionColor(hoveredColor)
+	}
+	const removeText = () => {
+		if (!textPersistence){
+			setShowText(false)
+			setRegionColor(unhoveredColor)
+		}
+	}
 
 	const tokens:word[] = props.tokens
 
@@ -87,13 +97,11 @@ export default function TextRegion(props:regionProps) {
 			onClick={ () => {
 				let sentence:string = '' // do this in one line?
 				tokens.forEach((w:word) => sentence += w.token)
-				console.log(words)
 				props.togglePopup()
 				props.setToken(word.token)
 				props.setDefinition(word.definitions)
 				props.setSentence(sentence)
 				props.setPanelRegion(props.panelRegion)
-				console.log(props.panelRegion)
 				}}>
 				{word.token}
 			</span>
@@ -107,8 +115,8 @@ export default function TextRegion(props:regionProps) {
 						position={'absolute'}
 						left =　{ (xmin/naturalWidth)*100  + 5 + "%" } 
 						top =　{ (ymin/naturalHeight)*100  - 5 + "%"}
-						onMouseEnter = {() => textController()}
-						onMouseLeave = {() => textController()}
+						onMouseEnter = {() => setText()}
+						onMouseLeave = {() => removeText()}
 						zIndex = {100000}
 					>
 						{renderEachToken(tokens)}
@@ -122,8 +130,8 @@ export default function TextRegion(props:regionProps) {
 				top 	={ (ymin/naturalHeight)*100 + "%"}
 				height	={ ((ymax-ymin)/naturalHeight)*100 + "%"}
 				backgroundColor = {regionColor}
-				onMouseEnter = {() => textController()}
-				onMouseLeave = {() => textController()}
+				onMouseEnter = {() => setText()}
+				onMouseLeave = {() => removeText()}
 				onClick = {() => togglePersistence()}
 				zIndex = { getZIndex() }
 			>

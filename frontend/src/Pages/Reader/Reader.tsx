@@ -71,12 +71,22 @@ export default function Reader() {
     showPopup ? setShowPopup(false) : setShowPopup(true)
   }
 
+  const newPageReset = () => {
+    setShowPopup(false)
+  }
+  
   useKeyboardShortcut(["ArrowLeft"],
-    () => { if (cur_page > 0) setPage(cur_page - 1) }
+    () => { 
+      if (cur_page > 0) setPage(cur_page - 1) 
+      newPageReset()
+    }
   )
 
   useKeyboardShortcut(["ArrowRight"],
-    () => { if (cur_page < page_count - 1) setPage(cur_page + 1) }
+    () => { 
+      if (cur_page < page_count - 1) setPage(cur_page + 1) 
+      newPageReset()
+    }
   )
 
   // initialize the IPC listener
