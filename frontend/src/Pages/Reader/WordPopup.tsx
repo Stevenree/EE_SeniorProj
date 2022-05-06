@@ -3,12 +3,22 @@ import { Box, Button, IconButton } from '@chakra-ui/react'
 import React from 'react'
 import Draggable from 'react-draggable';
 
+type panelRegion = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
+}
+
 
 type popupProps = {
   token: string,
   sentence: string,
   definitions: string[], // probably a list tbh
+  panelRegion: panelRegion,
+  base64Image: string,
 }
+
 declare var window: any;
 export default function WordPopup(props:popupProps) {
 
@@ -17,8 +27,11 @@ export default function WordPopup(props:popupProps) {
       "word":props.token, 
       "definitions":props.definitions.join("\n"),
       "sentence":props.sentence,
+      "panelRegion":props.panelRegion,
+      "base64Image":props.base64Image,
     })
   }
+
   return (
     <Draggable>
       <Box  className="popup"

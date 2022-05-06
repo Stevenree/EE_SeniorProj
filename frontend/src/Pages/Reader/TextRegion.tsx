@@ -2,14 +2,24 @@ import { Box } from '@chakra-ui/react'
 import React from 'react'
 
 // seperate 
+
+type panelRegion = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
+}
+
 type regionProps = {
 	xyxy: number[],
 	naturalArea: number[],
 	tokens: word[],
+	panelRegion: panelRegion,
 	setToken: any, // idk what the type of a const function is lol
 	setDefinition: any,
 	setSentence: any,
 	togglePopup: any,
+	setPanelRegion: any,
 }
 
 type word = {
@@ -17,7 +27,6 @@ type word = {
 	lemma: string,
   definitions: string[],
 }
-
 
 export default function TextRegion(props:regionProps) {
 	
@@ -39,7 +48,8 @@ export default function TextRegion(props:regionProps) {
 
 	const naturalWidth = props.naturalArea[0]
 	const naturalHeight = props.naturalArea[1]
-	
+	const panelRegion = props.panelRegion
+
 	const togglePersistence = () => {
 		if (textPersistence) {
 			setTextPersistence(false) 
@@ -63,6 +73,16 @@ export default function TextRegion(props:regionProps) {
 		}
 		else return
 	}
+	const setText = () => {
+		setShowText(true)
+		setRegionColor(hoveredColor)
+	}
+	const removeText = () => {
+		if (!textPersistence){
+			setShowText(false)
+			setRegionColor(unhoveredColor)
+		}
+	}
 
 	const tokens:word[] = props.tokens
 
@@ -77,11 +97,11 @@ export default function TextRegion(props:regionProps) {
 			onClick={ () => {
 				let sentence:string = '' // do this in one line?
 				tokens.forEach((w:word) => sentence += w.token)
-				console.log(words)
 				props.togglePopup()
 				props.setToken(word.token)
 				props.setDefinition(word.definitions)
 				props.setSentence(sentence)
+				props.setPanelRegion(props.panelRegion)
 				}}>
 				{word.token}
 			</span>
@@ -95,8 +115,8 @@ export default function TextRegion(props:regionProps) {
 						position={'absolute'}
 						left =　{ (xmin/naturalWidth)*100  + 5 + "%" } 
 						top =　{ (ymin/naturalHeight)*100  - 5 + "%"}
-						onMouseEnter = {() => textController()}
-						onMouseLeave = {() => textController()}
+						onMouseEnter = {() => setText()}
+						onMouseLeave = {() => removeText()}
 						zIndex = {100000}
 					>
 						{renderEachToken(tokens)}
@@ -110,8 +130,8 @@ export default function TextRegion(props:regionProps) {
 				top 	={ (ymin/naturalHeight)*100 + "%"}
 				height	={ ((ymax-ymin)/naturalHeight)*100 + "%"}
 				backgroundColor = {regionColor}
-				onMouseEnter = {() => textController()}
-				onMouseLeave = {() => textController()}
+				onMouseEnter = {() => setText()}
+				onMouseLeave = {() => removeText()}
 				onClick = {() => togglePersistence()}
 				zIndex = { getZIndex() }
 			>
