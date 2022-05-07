@@ -31,7 +31,7 @@ export default function TextRegion(props:regionProps) {
 	// Need to grab the parent containers height+width
 	// to properly position the boxes if the container is not
 	// the  original image size.
-	const unhoveredColor 	= '#ffFF0040'
+	const unhoveredColor 	= '#ffFF0000'
 	const hoveredColor   	= '#fbb97550'
 	const persistentColor = '#2ea6ff99'
 
