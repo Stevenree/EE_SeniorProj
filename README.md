@@ -12,12 +12,20 @@ Because of github limitations, the models are not provided in this repository.
 Currently the application is set up to run the ML model on a seperate python Flask server.
 Because of limitations of our development environment, we have been testing this with the CPU model. The CUDA model should work too.
 
-<Include pictures here>
+ ### Hovering over text region
+<img src="/screenshots/ui-hover.png" alt="drawing" width="600"/>
+ 
+ ### Clicking on token
+<img src="/screenshots/ui-click.png" alt="drawing" width="600"/>
+ 
+ ### Export to anki layout (anki deck/model settings currently unmodifiable)
+<img src="/screenshots/ui-anki.png" alt="drawing" width="600"/>
+ 
 ## Dependencies
 1. npm
 2. Python3
 3. Flask
-4. Detectronv2
+4. Pytesseract
 
 ## Usage
 Start app (dev, not build) by typing in the root directory:
@@ -25,7 +33,8 @@ Start app (dev, not build) by typing in the root directory:
 \\ frontend
 cd frontend
 npm run dev
-
+```
+```
 \\ backend
 cd flask
 venv\Scripts\activate.bat
@@ -44,6 +53,7 @@ flask run
 
   ## Features to be added
 - Improved OCR detection (Remove furigana & noise)
+- Typesetting overlay s.t hovering over actual tokens works
 
 ## Course info
 [The Cooper Union for the Advancement of Science and Art](https://cooper.edu/engineering/courses/electrical-and-computer-engineering-undergraduate/ece-395)
