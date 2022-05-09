@@ -3,31 +3,6 @@ import React from 'react'
 
 import { regionProps, word } from './types'
 
-// type panelRegion = {
-//   xmin: number,
-//   ymin: number,
-//   xmax: number,
-//   ymax: number,
-// }
-
-// type regionProps = {
-// 	xyxy: number[],
-// 	naturalArea: number[],
-// 	tokens: word[],
-// 	panelRegion: panelRegion,
-// 	setToken: any, // idk what the type of a const function is lol
-// 	setDefinition: any,
-// 	setSentence: any,
-// 	togglePopup: any,
-// 	setPanelRegion: any,
-// }
-
-// type word = {
-//   token: string,
-// 	lemma: string,
-//   definitions: string[],
-// }
-
 export default function TextRegion(props:regionProps) {
 	
 	// Need to grab the parent containers height+width
