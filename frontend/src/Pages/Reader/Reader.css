@@ -79,6 +79,11 @@
     color: rgb(7, 31, 83);
 }
 
+.popup-pos{
+    font-weight: lighter;
+    font-size:18px;
+    color:rgba(7,31,83,0.700)
+}
 .popup-sentence{
     margin-bottom: 10px;
 }

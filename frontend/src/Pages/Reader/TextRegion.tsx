@@ -1,30 +1,32 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
 
-type panelRegion = {
-  xmin: number,
-  ymin: number,
-  xmax: number,
-  ymax: number,
-}
+import { regionProps, word } from './types'
 
-type regionProps = {
-	xyxy: number[],
-	naturalArea: number[],
-	tokens: word[],
-	panelRegion: panelRegion,
-	setToken: any, // idk what the type of a const function is lol
-	setDefinition: any,
-	setSentence: any,
-	togglePopup: any,
-	setPanelRegion: any,
-}
+// type panelRegion = {
+//   xmin: number,
+//   ymin: number,
+//   xmax: number,
+//   ymax: number,
+// }
 
-type word = {
-  token: string,
-	lemma: string,
-  definitions: string[],
-}
+// type regionProps = {
+// 	xyxy: number[],
+// 	naturalArea: number[],
+// 	tokens: word[],
+// 	panelRegion: panelRegion,
+// 	setToken: any, // idk what the type of a const function is lol
+// 	setDefinition: any,
+// 	setSentence: any,
+// 	togglePopup: any,
+// 	setPanelRegion: any,
+// }
+
+// type word = {
+//   token: string,
+// 	lemma: string,
+//   definitions: string[],
+// }
 
 export default function TextRegion(props:regionProps) {
 	
@@ -102,6 +104,7 @@ export default function TextRegion(props:regionProps) {
 				props.setDefinition(word.definitions)
 				props.setSentence(sentence)
 				props.setPanelRegion(props.panelRegion)
+				props.setPos(word.pos)
 				}}>
 				{word.token}
 			</span>

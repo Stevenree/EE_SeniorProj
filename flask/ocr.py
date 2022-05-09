@@ -41,7 +41,13 @@ class OCR():
     [{"token": "__", "dictForm": "__", "definitions": ["__",...}, ...]
     '''
     jam = Jamdict()
-    tokens  = [{"token":m.surface(), "lemma":m.dictionary_form()} for m in self.tokenizer_obj.tokenize(text, self.tokenizationMode)]
+    tokens  = [{
+      "token":m.surface(), 
+      "lemma":m.dictionary_form(), 
+      "pos":", ".join(filter(lambda x: x!="*", m.part_of_speech()))
+      } for m in self.tokenizer_obj.tokenize(text, self.tokenizationMode)]
+
+    
 
     for i in range(len(tokens)):
       tokens[i]["definitions"] = []
@@ -49,6 +55,7 @@ class OCR():
       if tokens[i]["lemma"] != "":
         try:
           result = jam.lookup(query=tokens[i]["lemma"])
+          print(result)
           for definition in result.entries[:3]:
               tokens[i]['definitions'].append(definition.text())
         except Exception as e:

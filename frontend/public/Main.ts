@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-str */
 const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -13,14 +14,14 @@ let DEFAULT_ANKI_DECK = "test1"
 let DEFAULT_ANKI_MODEL = "Manga-OCR-Sentence"
 let ANKI_CONNECT_ENDPOINT = "http://localhost:8765/"
 
-function evokeAnki(action, params){
+async function evokeAnki(action, params){
     try {
         let post = {}
         post["action"] = action
         post["version"] = 6
         post["params"] = params
 
-        fetch(ANKI_CONNECT_ENDPOINT, {
+        return fetch(ANKI_CONNECT_ENDPOINT, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -37,17 +38,48 @@ function initializeAnkiDeck(){
 }
 
 function initializeAnkiModel(){
+    const front = '<span class="word"> {{Word}} </span>';
+    const back = ' <span class="word"> {{Word}} </span> <br>\
+            <<span class="pos">{{POS}}</span>> <br>\
+            {{Definition}} <hr> \
+            <span class="exp"> context image </span> <br>\
+            {{Panel}}<br> \
+            <span class="exp"> sample sentence </span> <br>\
+            {{Sentence}}';
+    
     let cardModelParams = {
         "modelName":DEFAULT_ANKI_MODEL, 
-        "inOrderFields":["Word","Definition","Sentence","Panel"],
+        "inOrderFields":["Word","POS", "Definition","Sentence","Panel"],
         "isCloze":false,
         "cardTemplates":[{
             "Name":DEFAULT_ANKI_MODEL, 
-            "Front": "<h1> {{Word}} </h1>", 
-            "Back": "<h1> {{Word}} </h1> {{Definition}} <hr> {{Panel}} <hr> {{Sentence}}"
+            "Front": front,
+            "Back":back
         }]
     }
     evokeAnki('createModel', cardModelParams)
+        .then(()=>{initializeAnkiModelStyling()})
+}
+
+function initializeAnkiModelStyling(){
+    const css = ".card {\
+                font-family: arial;\
+                font-size: 20px;\
+                text-align: center;\
+                color: black;\
+                background-color: white;\
+               }\
+               .word { color:rgb(30,30,110); font-size:36px; font-weight:600; }\
+               .pos {	color:rgb(80,30,110)}\
+               .exp {color:rgba(0,0,0,0.5)}\
+               img { max-width:400px }";
+    let styleParams = {
+        "model": {
+            "name":DEFAULT_ANKI_MODEL,
+            "css":css
+        }
+    }
+    evokeAnki('updateModelStyling', styleParams)
 }
 
 
@@ -69,7 +101,7 @@ function cropBase64(base64, region){
     }
 }
 
-function addAnkiNote(word, definition, sentence, panelRegion, base64Image){
+function addAnkiNote(word, pos, definition, sentence, panelRegion, base64Image){
     cropBase64(base64Image, panelRegion).then( (imgBuffer) => {
         let imgData = imgBuffer.toString('base64')
         let noteParams = {
@@ -78,6 +110,7 @@ function addAnkiNote(word, definition, sentence, panelRegion, base64Image){
                 "modelName":DEFAULT_ANKI_MODEL,
                 "fields":{
                     "Word":word,
+                    "POS":pos,
                     "Definition":definition,
                     "Sentence":sentence,
                 },
@@ -251,12 +284,13 @@ function createWindow() {
     ipc.on('addNote', (event,arg) => {
         console.log("IPC: addNote event")
         console.log(arg["word"])
+        console.log(arg["pos"])
         console.log(arg["definitions"])
         console.log(arg["sentence"])
         // arg should be dict with word, definition, sentence fields
         initializeAnkiDeck()
         initializeAnkiModel()
-        addAnkiNote(arg["word"], arg["definitions"], arg["sentence"], arg['panelRegion'], arg['base64Image'])
+        addAnkiNote(arg["word"], arg["pos"], arg["definitions"], arg["sentence"], arg['panelRegion'], arg['base64Image'])
     })
 }
 

@@ -9,37 +9,9 @@ import useKeyboardShortcut from './use-keyboard-shortcut'
 import upArrow from 'src/assets/upArrow.png'
 import TextRegion from './TextRegion'
 import WordPopup from './WordPopup'
+import { page } from './types'
 
 declare var window: any;
-
-type page = {
-  base64: string,
-  width: number,
-  height: number,
-  boxes: box[],
-}
-
-type panelRegion = {
-  xmin: number,
-  ymin: number,
-  xmax: number,
-  ymax: number,
-}
-
-type box = {
-  xmin: number,
-  ymin: number,
-  xmax: number,
-  ymax: number,
-  text: word[],
-  panel: panelRegion,
-}
-
-type word = {
-  token: string,
-  lemma: string,
-  definitions: string[],
-}
 
 export default function Reader() {
   const [pages, setPages] = React.useState([{ 
@@ -64,6 +36,7 @@ export default function Reader() {
   const [token, setToken] = React.useState('INIT TOKEN')
   const [definitions, setDefinitions] = React.useState(['DEFINITION GOES HERE'])
   const [sentence, setSentence] = React.useState('INIT SEN')
+  const [pos, setPos] = React.useState('')
   const [panelRegion, setPanelRegion] = React.useState({'xmin':0,'ymin':0,'xmax':0,'ymax':0})
 
   // const functions to wrap the set state functions so its usable as component params
@@ -105,6 +78,7 @@ export default function Reader() {
     token={token} 
     definitions={definitions} 
     sentence={sentence} 
+    pos={pos}
     panelRegion={panelRegion} 
     base64Image={pages[cur_page].base64} 
   />
@@ -126,6 +100,7 @@ export default function Reader() {
           setToken={setToken}
           setDefinition={setDefinitions}
           setSentence={setSentence}
+          setPos={setPos}
           togglePopup={togglePopup}
           setPanelRegion={setPanelRegion}
         />
